@@ -3,7 +3,7 @@ This repository includes all data, lab protocols, and R scripts associated with 
 
 ## Protocols
 
-This folder includes lab protocols used for this project. See [Protocols_README] (/Protocols/Protocols_README.md) within the [Protocols] (/Protocols) folder for more details. 
+This folder includes lab protocols used for this project. See [Protocols_README] (/Protocols/Protocols_README.md) within the [Protocols] (https://github.com/julianacornett/flatfish-hypoxia-thesis/tree/main/Protocols) folder for more details. 
 
 ## Data
 
