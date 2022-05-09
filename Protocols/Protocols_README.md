@@ -1,6 +1,6 @@
 # Protocols
 
-This folder contains protocols used for this project, divided into the following categories:
+This folder contains lab protocols used for this project, divided into the following categories:
 
 ## [Respirometry](Respirometry)
 * [**"MLML_RespirometryProtocol.pdf"**](Respirometry/MLML_RespirometryProtocol.pdf)
