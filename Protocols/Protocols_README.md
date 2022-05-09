@@ -3,19 +3,21 @@
 This folder contains protocols used for this project, divided into the following categories:
 
 ## Respirometry
-* "MLML_RespirometryProtocol.pdf"
+* **"MLML_RespirometryProtocol.pdf"**
 
 _Protocol for taking metabolic rate measurements via intermittent flow respirometry, using the Loligo Systems AutoResp software. This protocol comes from the Ichthyology Lab at Moss Landing Marine Laboratories._
-* "MLML_MMRProtocol.pdf"
+* **"MLML_MMRProtocol.pdf"**
 
 _Addendum to the Respirometry Protocol for taking Maximum Metabolic Rate (MMR) measurements. This protocol comes from the Ichthyology Lab at Moss Landing Marine Laboratories._
 
 ## Ventilation
-* "MLML_VentilationProtocol.pdf"
+* **"MLML_VentilationProtocol.pdf"**
+
 _Protocol for setting up ventilation chambers, and taking video recordings to measure ventilation rate. This protocol comes from the Ichthyology Lab at Moss Landing Marine Laboratories._
 
 ## Blood_Sampling
-* "LoganLab_HematocritProtocol.pdf"
+* **"LoganLab_HematocritProtocol.pdf"**
+
 _Protocol for blood sampling via caudal ablation, as well as for taking hematocrit measurements. This protocol comes from the Logan Lab at California State University, Monterey Bay._
 
 ## Tissue_Assays
