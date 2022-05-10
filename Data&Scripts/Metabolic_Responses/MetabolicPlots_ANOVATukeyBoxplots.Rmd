@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #install.packages("tidyverse")
 #install.packages("ggpubr")
 #install.packages("patchwork")
-#install.packages("multcompView")
+#install.packages("multcompView)
 ```
 
 #load libraries
@@ -23,12 +23,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(ggpubr)
+library(patchwork)
+library(multcompView)
 ```
 
-#read in CSV files with MMR & SMR data for English sole at each DO level
+#read in CSV file with MMR & SMR data for English sole at each DO level
 
 ```{r}
-sole_scope <- read.csv("../Data/Scope_Pvetulus.csv")
+sole_scope <- read.csv("Englishsole_Metabolic.csv")
 ```
 
 #create new ambient and hypoxic aerobic scope columns by subtracting MMR - SMR
@@ -385,15 +387,11 @@ changeScope_box <- ggplot(changeScope, aes(DO_mgL, ScopeChange)) +
   xlab("DO (mg/L)")
 ```
 
-#BOXPLOTS
+#BOXPLOTS with patchwork
 
 ```{r} 
-jpeg("EnglishSole_MetabolicBoxplots_Patchwork.jpg", width = 14, height = 16, units="in", res=1200)
-
 (postSMR_box | changeSMR_box)/
   (postMMR_box | changeMMR_box)/
   (postScope_box | changeScope_box)
-
-dev.off()
 ```
 
