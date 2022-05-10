@@ -76,6 +76,14 @@ Data was collected by Juliana Cornett following protocols in the [Tissue_Assays]
 
 _csv files for both species with fish ID, Species, DO (mg/L), weight (g), total length (cm), pre- and post-exposure ventilation rate (breaths/min), hematocrit (%), L-Lactate in muscle tissue (uM), superoxide dismutase (SOD) in gill tissue (U/mL), and hypoxia-inducibel factor-1a (HIF) in brain tissue (pg/mL)._
 
+* [**"BiochemicalPlots_LinearModelScatterplots.Rmd"**](Biochemical_Changes/BiochemicalPlots_LinearModelScatterplots.Rmd) (Figures 12 & 13 in thesis)
+
+_R script for linear models & scatterplots of DO versus biochemical measurement (L-lactate, SOD, or HIF), to test for relationship between DO level and biochemical measurements._
+
+* [**"BiochemicalPlots_ANOVATukeyBoxplots.Rmd"**](Biochemical_Changes/BiochemicalPlots_ANOVATukeyBoxplots.Rmd) (Figures 10 & 11 in thesis)
+
+_R script for ANOVA with Tukey post-hoc test & boxplots of DO versus biochemical measurement (L-lactate, SOD, or HIF), to compare mean biochemical measurement between DO levels._
+
 ## [PCA](PCA)
 
 This analysis includes data from multiple physiological response measurements. 
