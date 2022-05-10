@@ -37,7 +37,7 @@ _csv files for both species with fish ID, Species, DO (mg/L), weight (g), total 
 
 * [**"CompensatoryPlots_LinearModelScatterplots.Rmd"**](Compensatory_Mechanisms/CompensatoryPlots_LinearModelScatterplots.Rmd)
 
-_R script for linear models & scatterplots of DO versus compensatory mechanism (hematocrit or pre- to post-exposure change in ventilation rate), to test for relationship between DO level and metabolic parameters._
+_R script for linear models & scatterplots of DO versus compensatory mechanism (hematocrit or pre- to post-exposure change in ventilation rate), to test for relationship between DO level and compensatory mechanism measurements._
 
 * [**"CompensatoryPlots_ANOVATukeyBoxplots.Rmd"**](Compensatory_Mechanisms/CompensatoryPlots_ANOVATukeyBoxplots.Rmd)
 
