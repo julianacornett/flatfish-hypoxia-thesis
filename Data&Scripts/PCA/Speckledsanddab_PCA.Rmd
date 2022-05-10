@@ -1,0 +1,292 @@
+---
+title: "Cstig_PCA"
+author: "Juliana Cornett"
+date: "12/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#install packages (tidyverse for data manipulation, and ggpubr, factoextra, and viridis for data visualization/plots)
+
+```{r}
+#install.packages("ggpubr")
+#install.packages("tidyverse")
+#install.packages("factoextra")
+#install.packages("viridis")
+#install.packages("FactoMineR")
+#install.pacakges("dplyr")
+#install.packages("patchwork")
+install.packages("outliers")
+```
+
+#load libraries
+
+```{r}
+library(ggpubr)
+library(tidyverse)
+library(factoextra)
+library(viridis)
+library(FactoMineR)
+library(dplyr)
+library(patchwork)
+library(outliers)
+```
+
+#read in csv file containing all variables associated with C. stigmaeus fish from the ventilation trials (ID, Species, DO, weight, length, Hct, Vent, Lac, SOD, and HIF)
+
+```{r}
+Cstig_vars <- read.csv("../Data/Cstig_AllVars.csv")
+```
+
+#remove all rows with NA since PCA doesn't work with missing values
+
+```{r}
+Cstig_na <- na.omit(Cstig_vars)
+```
+
+#run PCA on all quantitative variables (columns 7-11), excluding ID, species, DO, length, weight, and ambient ventilation rate
+
+```{r}
+Cstig.pca <- prcomp(Cstig_na[,c(7:11)], center = TRUE,scale. = TRUE)
+summary(Cstig.pca)
+```
+
+#plot relative contribution of variables to principle components
+#gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+```{r}
+#jpeg("Sanddab_varPCA.jpg", width = 7, height = 5, units="in", res=1200)
+fviz_pca_var(Cstig.pca, col.var = "contrib", gradient.cols = c("#482677FF", "#20A387FF", "#FDE725FF"), repel = TRUE, legend.title = "Contribution") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(),
+        axis.line = element_line(colour = "black")) +
+  labs(title = NULL, x = "Principal Component 1 (25.6%)", y = "Principal Component 2 (24.5%)") +
+  theme(axis.title=element_text(size=14,face="bold")) 
+#dev.off()
+```
+
+#color individuals by DO
+
+```{r}
+#jpeg("Sanddab_indPCA.jpg", width = 7, height = 5, units="in", res=1200)
+fviz_pca_ind(Cstig.pca, label="none", habillage=Cstig_na$DO,
+     addEllipses=TRUE, ellipse.level=0.95, legend.title = "DO (mg/L)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+   labs(title = NULL, x = "Principal Component 1 (25.6%)", y = "Principal Component 2 (24.5%)") +
+  theme(axis.title=element_text(size=14,face="bold")) +
+  scale_colour_viridis_d(option = "viridis") +
+  scale_fill_viridis_d(option = "viridis") 
+#dev.off() 
+```
+
+#plot with ellipses & variables arrows
+
+```{r}
+#jpeg("SpeckledSanddab_PCA_Biplot.jpg", width = 7, height = 5, units="in", res=1200)
+fviz_pca_biplot(Cstig.pca, label="var", repel=TRUE, alpha.ind=0, mean.point=FALSE, col.var = "black", habillage=Cstig_na$DO,
+               addEllipses=TRUE, ellipse.level=0.95, legend.title = "DO (mg/L)") + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+   labs(title = NULL, x = "Principal Component 1 (25.6%)", y = "Principal Component 2 (24.5%)") +
+  theme(axis.title=element_text(size=14,face="bold")) +
+  scale_colour_viridis_d(option = "viridis") +
+  scale_fill_viridis_d(option = "viridis")
+#dev.off()
+```
+
+#PCA with scores
+
+```{r}
+princomp(Cstig_na[,c(7:11)], cor = FALSE, scores = TRUE)
+```
+
+#add DO as supplementary qualitative variable ("quali.sup") - DO is column 3
+
+```{r}
+res.pca <- PCA(Cstig_na[,c(7:11)], quali.sup = 3, graph = FALSE)
+```
+
+```{r}
+print(res.pca)
+```
+
+```{r}
+ind <- get_pca_ind(res.pca)
+```
+
+```{r}
+ind$coord[,1]
+```
+
+#create new dataframe of individual PC scores with DO levels and coordinates for PC1 and PC2
+
+```{r}
+ind_PC <- select(Cstig_na, c("DO"))
+ind_PC$coordPC1 <- ind$coord[,1]
+ind_PC$coordPC2 <- ind$coord[,2]
+ind_PC
+```
+#use Grubbs test to determine if high value for PC2 at 1.5 mg/L O2 is outlier
+
+```{r}
+grubbs_test_pc2 <- grubbs.test(ind_PC$coordPC2)
+grubbs_test_pc2
+```
+
+#create dataframe with PC2 scores only without outlier
+
+```{r}
+#select only DO and PC2 scores
+ind_PC2 <- select(ind_PC, c("DO", "coordPC2"))
+#remove row with outlier (42nd row)
+indPC2_noOutlier <- ind_PC2[-c(42), ]
+indPC2_noOutlier
+```
+
+#PC1
+
+#create dataframes with mean and variance
+
+```{r}
+dab_mPC1 <- group_by(ind_PC, DO) %>% summarize(meanPC1 = mean(coordPC1))
+dab_vPC1 <- group_by(ind_PC, DO) %>% summarize(varPC1 = var(coordPC1))
+```
+
+#PC2
+
+#create dataframes with mean and variance
+
+```{r}
+dab_mPC2 <- group_by(indPC2_noOutlier, DO) %>% summarize(meanPC2 = mean(coordPC2))
+dab_vPC2 <- group_by(indPC2_noOutlier, DO) %>% summarize(varPC2 = var(coordPC2))
+```
+
+#linear models
+
+#PC1
+
+```{r}
+dab_mPC1_lm <- lm(ind_PC$coordPC1 ~ ind_PC$DO)
+print(summary(dab_mPC1_lm))
+```
+
+#variance in PC1
+
+```{r}
+dab_vPC1_lm <- lm(dab_vPC1$varPC1 ~ dab_vPC1$DO)
+print(summary(dab_vPC1_lm))
+```
+
+#PC2
+
+```{r}
+dab_mPC2_lm <- lm(indPC2_noOutlier$coordPC2 ~ indPC2_noOutlier$DO)
+print(summary(dab_mPC2_lm))
+```
+
+#variance in PC2
+
+```{r}
+dab_vPC2_lm <- lm(dab_vPC2$varPC2 ~ dab_vPC2$DO)
+print(summary(dab_vPC2_lm))
+```
+
+#try nonlinear regression for PC2 scores & variance for speckled sanddabs
+
+#polynomial regression for PC2 scores
+
+```{r}
+lm(coordPC2 ~ poly(DO, 2, raw = TRUE), data = indPC2_noOutlier) %>%
+  summary()
+```
+
+#plot nonlinear for PC2 scores
+
+```{r}
+ggplot(indPC2_noOutlier, aes(DO, coordPC2) ) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  stat_smooth(method='lm', color="black", se = FALSE, formula = y ~ poly(x, 2)) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Individual PC Score (PC2)") +
+  geom_text(aes(x=2.5, y=2, label= "R^2 == 0.32~~~p < 0.001 "), size=5, parse = TRUE)
+```
+
+
+#polynomial regression for PC2 score variance
+
+```{r}
+lm(varPC2 ~ poly(DO, 2, raw = TRUE), data = dab_vPC2) %>%
+  summary()
+```
+
+#plot nonlinear for PC2 score variance
+
+```{r}
+ggplot(dab_vPC2, aes(DO, varPC2) ) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  stat_smooth(method='lm', color="black", se = FALSE, formula = y ~ poly(x, 2)) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Variance in Individual PC Score (PC2)") +
+  geom_text(aes(x=2.5, y=0.55, label = "R^2 == 0.54~~~p == 0.31"), size = 5, parse = TRUE)
+```
+
+#combine plots with patchwork
+
+```{r}
+jpeg("SpeckledSanddab_PC1_2.jpg", width = 14, height = 10, units="in", res=1200)
+
+#Regression of PC scores on PC1 vs DO
+
+dab_pc1_p1 <- ggplot(ind_PC, aes(DO, coordPC1)) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Individual PC Score (PC1)") + 
+  geom_text(aes(x=6.5, y=2.5, label= "R^2 < 0.001~~~p == 0.98"), size=5, parse = TRUE)
+
+#Regression in PC1 PC Score Variance vs DO
+
+dab_pc1_p2 <- ggplot(dab_vPC1, aes(DO, varPC1)) + 
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Variance in Individual PC Score (PC1)")
+
+#Nonlinear Regression of Individual PC scores on PC2 vs DO
+
+dab_pc2_p3 <- ggplot(indPC2_noOutlier, aes(DO, coordPC2) ) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  stat_smooth(method='lm', color="black", se = FALSE, formula = y ~ poly(x, 2)) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Individual PC Score (PC2)") +
+  geom_text(aes(x=6.5, y=2, label= "R^2 == 0.32~~~p < 0.001 "), size=5, parse = TRUE)
+
+#Regression in PC2 PC Score Variance vs DO
+
+dab_pc2_p4 <- ggplot(dab_vPC2, aes(DO, varPC2) ) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  stat_smooth(method='lm', color="black", se = FALSE, formula = y ~ poly(x, 2)) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Variance in Individual PC Score (PC2)") +
+  geom_text(aes(x=7, y=0.55, label = "R^2 == 0.54~~~p == 0.31"), size = 5, parse = TRUE)
+
+(dab_pc1_p1 | dab_pc1_p2)/
+  (dab_pc2_p3 | dab_pc2_p4)
+
+dev.off()
+```
+

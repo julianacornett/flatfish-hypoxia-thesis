@@ -1,0 +1,451 @@
+---
+title: "Biochemical Plots - ANOVA, Tukey HSD, & Boxplots"
+author: "Juliana Cornett"
+date: "3/27/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#install packages
+
+```{r}
+#install.packages("tidyr")
+#install.packages("ggplot2")
+#install.packages("tidyverse")
+#install.packages("ggpubr")
+#install.packages("patchwork")
+#install.packages("multcompView")
+```
+
+#load libraries
+
+```{r}
+library(tidyr)
+library(ggplot2)
+library(tidyverse)
+library(ggpubr)
+library(patchwork)
+library(multcompView)
+```
+
+#DATA PREPARATION
+
+#read in csv file containing all measurements for each species
+
+```{r}
+PvetAll <- read.csv("../Data/Pvet_AllVars.csv")
+
+CstigAll <- read.csv("../Data/Cstig_AllVars.csv")
+```
+
+#HIF BOXPLOTS
+
+#ENGLISH SOLE 
+
+#select only DO & HIF
+
+```{r}
+soleHIF <- select(PvetAll, c("DO", "HIF"))
+```
+
+#make DO a factor
+
+```{r}
+soleHIF$DO <- as.factor(soleHIF$DO)
+```
+
+#remove NAs
+
+```{r}
+soleHIF <- na.omit(soleHIF)
+```
+
+#ANOVA
+
+```{r}
+sole_hif_anova <- aov(HIF ~ DO, data = soleHIF)
+summary(sole_hif_anova)
+```
+
+#boxplot
+
+```{r}
+sole_hif_box <- ggplot(soleHIF, aes(DO, HIF)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(x=5.5, y=125, label="ANOVA, p = 0.256", size=5) +
+  ylab("HIF (pg/mL)") + 
+  xlab("DO (mg/L)")
+```
+
+#SPECKLED SANDDABS
+
+#select only DO & HIF
+
+```{r}
+dabHIF <- select(CstigAll, c("DO", "HIF"))
+```
+
+#make DO a factor
+
+```{r}
+dabHIF$DO <- as.factor(dabHIF$DO)
+```
+
+#remove NAs
+
+```{r}
+dabHIF <- na.omit(dabHIF)
+```
+
+#ANOVA
+
+```{r}
+dab_hif_anova <- aov(HIF ~ DO, data = dabHIF)
+summary(dab_hif_anova)
+```
+
+#boxplot
+
+```{r}
+dab_hif_box <- ggplot(dabHIF, aes(DO, HIF)) + 
+  geom_boxplot(fill = "lightgoldenrod2") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(x=5.5, y=97, label="ANOVA, p = 0.174", size=5) +
+  ylab("HIF (pg/mL)") + 
+  xlab("DO (mg/L)")
+```
+
+#LACTATE BOXPLOTS
+
+#ENGLISH SOLE 
+
+#select only DO & Lactate
+
+```{r}
+soleLac <- select(PvetAll, c("DO", "Lactate"))
+```
+
+#make DO a factor
+
+```{r}
+soleLac$DO <- as.factor(soleLac$DO)
+```
+
+#remove NAs
+
+```{r}
+soleLac <- na.omit(soleLac)
+```
+
+#ANOVA
+
+```{r}
+sole_lac_anova <- aov(Lactate ~ DO, data = soleLac)
+summary(sole_lac_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+sole_lac_tukey <- TukeyHSD(sole_lac_anova)
+print(sole_lac_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+sole_lac_cld <- multcompLetters4(sole_lac_anova, sole_lac_tukey)
+print(sole_lac_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+sole_lac_table <- group_by(soleLac, DO) %>%
+  summarise(mean=mean(Lactate), quant = quantile(Lactate, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+sole_lac_cld <- as.data.frame.list(sole_lac_cld$DO)
+sole_lac_table$sole_lac_cld <- sole_lac_cld$Letters
+
+print(sole_lac_table)
+```
+
+#boxplot
+
+```{r}
+sole_lac_box <- ggplot(soleLac, aes(DO, Lactate)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = sole_lac_table, aes(x = DO, y = quant, label = sole_lac_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=5.5, y=2500, label="ANOVA, p < 0.001", size=5) +
+  ylab("Lactate (uM)") + 
+  xlab("DO (mg/L)")
+```
+
+#SPECKLED SANDDABS
+
+#select only DO & Lactate
+
+```{r}
+dabLac <- select(CstigAll, c("DO", "Lactate"))
+```
+
+#make DO a factor
+
+```{r}
+dabLac$DO <- as.factor(dabLac$DO)
+```
+
+#remove NAs
+
+```{r}
+dabLac <- na.omit(dabLac)
+```
+
+#ANOVA
+
+```{r}
+dab_lac_anova <- aov(Lactate ~ DO, data = dabLac)
+summary(dab_lac_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+dab_lac_tukey <- TukeyHSD(dab_lac_anova)
+print(dab_lac_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+dab_lac_cld <- multcompLetters4(dab_lac_anova, dab_lac_tukey)
+print(dab_lac_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+dab_lac_table <- group_by(dabLac, DO) %>%
+  summarise(mean=mean(Lactate), quant = quantile(Lactate, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+dab_lac_cld <- as.data.frame.list(dab_lac_cld$DO)
+dab_lac_table$dab_lac_cld <- dab_lac_cld$Letters
+
+print(dab_lac_table)
+```
+
+#boxplot
+
+```{r}
+dab_lac_box <- ggplot(dabLac, aes(DO, Lactate)) + 
+  geom_boxplot(fill = "lightgoldenrod2") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = dab_lac_table, aes(x = DO, y = quant, label = dab_lac_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=5.5, y=5250, label="ANOVA, p = 0.0123", size=5) +
+  ylab("Lactate (uM)") + 
+  xlab("DO (mg/L)")
+```
+
+#Lactate boxplots only
+
+```{r}
+jpeg("Lactate_Boxplots.jpg", width = 12, height = 5, units="in", res=1200)
+
+(sole_lac_box | dab_lac_box)
+
+dev.off()
+```
+
+
+#SOD BOXPLOTS
+
+#ENGLISH SOLE 
+
+#select only DO & SOD
+
+```{r}
+soleSOD <- select(PvetAll, c("DO", "SOD"))
+```
+
+#make DO a factor
+
+```{r}
+soleSOD$DO <- as.factor(soleSOD$DO)
+```
+
+#remove NAs
+
+```{r}
+soleSOD <- na.omit(soleSOD)
+```
+
+#ANOVA
+
+```{r}
+sole_sod_anova <- aov(SOD ~ DO, data = soleSOD)
+summary(sole_sod_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+sole_sod_tukey <- TukeyHSD(sole_sod_anova)
+print(sole_sod_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+sole_sod_cld <- multcompLetters4(sole_sod_anova, sole_sod_tukey)
+print(sole_sod_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+sole_sod_table <- group_by(soleSOD, DO) %>%
+  summarise(mean=mean(SOD), quant = quantile(SOD, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+sole_sod_cld <- as.data.frame.list(sole_sod_cld$DO)
+sole_sod_table$sole_sod_cld <- sole_sod_cld$Letters
+
+print(sole_sod_table)
+```
+
+#boxplot
+
+```{r}
+sole_sod_box <- ggplot(soleSOD, aes(DO, SOD)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = sole_sod_table, aes(x = DO, y = quant, label = sole_sod_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=5.5, y=2.75, label="ANOVA, p = 0.0434", size=5) +
+  ylab("SOD (U/mL)") + 
+  xlab("DO (mg/L)")
+```
+
+```{r}
+jpeg("EnglishSole_SODBoxplot.jpg", width = 7, height = 5, units="in", res=1200)
+ggplot(soleSOD, aes(DO, SOD)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = sole_sod_table, aes(x = DO, y = quant, label = sole_sod_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=5.5, y=2.75, label="ANOVA, p = 0.0434", size=5) +
+  ylab("SOD (U/mL)") + 
+  xlab("DO (mg/L)")
+dev.off()
+```
+
+#SPECKLED SANDDABS
+
+#select only DO & SOD
+
+```{r}
+dabSOD <- select(CstigAll, c("DO", "SOD"))
+```
+
+#make DO a factor
+
+```{r}
+dabSOD$DO <- as.factor(dabSOD$DO)
+```
+
+#remove NAs
+
+```{r}
+dabSOD <- na.omit(dabSOD)
+```
+
+#ANOVA
+
+```{r}
+dab_sod_anova <- aov(SOD ~ DO, data = dabSOD)
+summary(dab_sod_anova)
+```
+
+#boxplot
+
+```{r}
+dab_sod_box <- ggplot(dabSOD, aes(DO, SOD)) + 
+  geom_boxplot(fill = "lightgoldenrod2") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(x=5.5, y=9.1, label="ANOVA, p = 0.277", size=5) +
+  ylab("SOD (U/mL)") + 
+  xlab("DO (mg/L)")
+```
+
+
+#JOIN PLOTS with PATCHWORK
+
+#ENGLISH SOLE
+
+```{r}
+jpeg("EnglishSole_BiochemBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
+
+sole_hif_box / sole_lac_box / sole_sod_box
+
+dev.off()
+```
+
+#SPECKLED SANDDABS
+
+```{r}
+jpeg("SpeckledSanddabs_BiochemBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
+
+dab_hif_box / dab_lac_box / dab_sod_box
+
+dev.off()
+```
+
+#ANOVAs for Species Comparison Table p-values in Thesis
+
+#dataframe with both species
+
+```{r}
+BothBiochem <- rbind(PvetAll, CstigAll)
+BothBiochem
+```
+
+#anovas of each metric as a function of DO and Species + interaction
+
+```{r}
+aov_lac <- aov(Lactate ~ as.factor(DO) * as.factor(Species), data = BothBiochem)
+summary(aov_lac)
+```
+
+```{r}
+aov_hif <- aov(HIF ~ as.factor(DO) * as.factor(Species), data = BothBiochem)
+summary(aov_hif)
+```
+
+```{r}
+aov_sod <- aov(SOD ~ as.factor(DO) * as.factor(Species), data = BothBiochem)
+summary(aov_sod)
+```

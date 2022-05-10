@@ -1,0 +1,257 @@
+---
+title: "Biochemical Plots - Linear Model & Scatterplots"
+author: "Juliana Cornett"
+date: "1/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Script to plot all biochemical parameters measured (Lactate, SOD, and HIF) in same plot with shared x-axis (DO)
+
+
+#install packages
+
+```{r}
+#install.packages("tidyr")
+#install.packages("ggplot2")
+#install.packages("tidyverse")
+#install.packages("ggpubr")
+#install.packages("patchwork")
+```
+
+#load libraries
+
+```{r}
+library(tidyr)
+library(ggplot2)
+library(tidyverse)
+library(ggpubr)
+library(patchwork)
+```
+
+#read in csv file containing all measurements for each species
+
+```{r}
+PvetAll <- read.csv("../Data/Pvet_AllVars.csv")
+
+CstigAll <- read.csv("../Data/Cstig_AllVars.csv")
+```
+
+#select only ID, Species, DO, Lactate, SOD, and HIF columns for each
+
+```{r}
+PvetBiochem <- select(PvetAll, c("ID", "Species", "DO", "Lactate", "SOD", "HIF"))
+
+CstigBiochem <- select(CstigAll, c("ID", "Species", "DO", "Lactate", "SOD", "HIF"))
+```
+
+#SCATTERPLOTS
+
+#ENGLISH SOLE
+
+#linear models
+
+#hif
+
+```{r}
+sole_hif <- lm(PvetBiochem$HIF ~ PvetBiochem$DO)
+print(summary(sole_hif))
+```
+
+#lactate
+
+```{r}
+sole_lac <- lm(PvetBiochem$Lactate ~ PvetBiochem$DO)
+print(summary(sole_lac))
+```
+
+#sod
+
+```{r}
+sole_sod <- lm(PvetBiochem$SOD ~ PvetBiochem$DO)
+print(summary(sole_sod))
+```
+
+```{r}
+jpeg("EnglishSole_Biochemical_Scatter.jpg", width = 10, height = 8, units="in", res=1200)
+
+sole_hif_scatter_p1 <- ggplot(PvetBiochem, aes(x = DO, y = HIF)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 6.1) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("HIF (pg/mL)")
+
+sole_lac_scatter_p2 <- ggplot(PvetBiochem, aes(x = DO, y = Lactate)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 6.1) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Lactate (uM)")
+  
+sole_sod_scatter_p3 <- ggplot(PvetBiochem, aes(x = DO, y = SOD)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 6.1) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("SOD (U/mL)")
+
+sole_hif_scatter_p1 / sole_lac_scatter_p2 / sole_sod_scatter_p3
+
+dev.off()
+```
+
+#SPECKLED SANDDABS
+
+#linear models
+
+#hif
+
+```{r}
+dab_hif <- lm(CstigBiochem$HIF ~ CstigBiochem$DO)
+print(summary(dab_hif))
+```
+
+#lactate
+
+```{r}
+dab_lac <- lm(CstigBiochem$Lactate ~ CstigBiochem$DO)
+print(summary(dab_lac))
+```
+
+#sod
+
+```{r}
+dab_sod <- lm(CstigBiochem$SOD ~ CstigBiochem$DO)
+print(summary(dab_sod))
+```
+
+
+```{r}
+jpeg("SpeckledSanddabs_Biochemical_Scatter.jpg", width = 10, height = 8, units="in", res=1200)
+
+dab_hif_scatter_p1 <- ggplot(CstigBiochem, aes(x = DO, y = HIF)) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 6.1) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("HIF (pg/mL)")
+
+dab_lac_scatter_p2 <- ggplot(CstigBiochem, aes(x = DO, y = Lactate)) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 6.1) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Lactate (uM)")
+  
+dab_sod_scatter_p3 <- ggplot(CstigBiochem, aes(x = DO, y = SOD)) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 6.1) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("SOD (U/mL)")
+
+dab_hif_scatter_p1 / dab_lac_scatter_p2 / dab_sod_scatter_p3
+
+dev.off()
+```
+
+#Lactate scatterplots only
+
+```{r}
+jpeg("Lactate_Scatter.jpg", width = 12, height = 5, units="in", res=1200)
+
+sole_lac_scatter_p2 <- ggplot(PvetBiochem, aes(x = DO, y = Lactate)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Lactate (uM)")
+
+dab_lac_scatter_p2 <- ggplot(CstigBiochem, aes(x = DO, y = Lactate)) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("Lactate (uM)")
+  
+(sole_lac_scatter_p2 | dab_lac_scatter_p2)
+
+dev.off()
+```
+
+#HIF scatterplots only
+
+```{r}
+jpeg("HIF_Scatter.jpg", width = 12, height = 5, units="in", res=1200)
+
+sole_hif_scatter_p1 <- ggplot(PvetBiochem, aes(x = DO, y = HIF)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("HIF (pg/mL)")
+
+dab_hif_scatter_p1 <- ggplot(CstigBiochem, aes(x = DO, y = HIF)) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("HIF (pg/mL)")
+
+sole_hif_scatter_p1 | dab_hif_scatter_p1 
+
+dev.off()
+```
+
+#SOD scatterplots only
+
+```{r}
+jpeg("SOD_Scatter.jpg", width = 12, height = 5, units="in", res=1200)
+
+sole_sod_scatter_p3 <- ggplot(PvetBiochem, aes(x = DO, y = SOD)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5.25) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("SOD (U/mL)")
+
+dab_sod_scatter_p3 <- ggplot(CstigBiochem, aes(x = DO, y = SOD)) +
+  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5.25) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  xlab("DO (mg/L)") +
+  ylab("SOD (U/mL)")
+
+sole_sod_scatter_p3 | dab_sod_scatter_p3 
+
+dev.off()
+```
+
