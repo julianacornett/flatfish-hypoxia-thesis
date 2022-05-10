@@ -58,7 +58,7 @@ _R script for ANOVA with Tukey post-hoc test & boxplots of DO versus pre-exposur
 
 Data was collected by Juliana Cornett following protocols in the [Tissue_Assays](/Protocols/Tissue_Assays) folder. 
 
-## [Multivariate_Analyses](Multivariate_Analyses)
+## [PCA](PCA)
 
-These analyses includes data from multiple physiological response measurements. 
+This analysis includes data from multiple physiological response measurements. 
 
