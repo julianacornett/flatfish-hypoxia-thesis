@@ -1,0 +1,376 @@
+---
+title: "Compensatory Mechanism Plots - ANOVA, Tukey HSD, & Boxplots"
+author: "Juliana Cornett"
+date: "3/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#install packages
+
+```{r}
+#install.packages("tidyr")
+#install.packages("ggplot2")
+#install.packages("tidyverse")
+#install.packages("ggpubr")
+#install.packages("patchwork")
+#install.packages("multcompView")
+```
+
+#load libraries
+
+```{r}
+library(tidyr)
+library(ggplot2)
+library(tidyverse)
+library(ggpubr)
+library(patchwork)
+library(multcompView)
+```
+
+#DATA PREPARATION
+
+#read in csv file containing all measurements for each species
+
+```{r}
+PvetAll <- read.csv("../Data/Pvet_AllVars.csv")
+
+CstigAll <- read.csv("../Data/Cstig_AllVars.csv")
+```
+
+#select only ID, Species, DO, Lactate, SOD, and HIF columns for each
+
+```{r}
+PvetComp <- select(PvetAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
+
+CstigComp <- select(CstigAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
+```
+
+#create ventilation rate change column (hypVent - AmbVent)
+
+```{r}
+PvetComp$VentChange <- (PvetComp$HypVent - PvetComp$AmbVent)
+
+CstigComp$VentChange <- (CstigComp$HypVent - CstigComp$AmbVent)
+```
+
+#VENTILATION BOXPLOTS
+
+#ENGLISH SOLE
+
+#select only DO & VentChange
+
+```{r}
+PvetVent <- select(PvetComp, c("DO", "VentChange"))
+```
+
+#make DO a factor
+
+```{r}
+PvetVent$DO <- as.factor(PvetVent$DO)
+```
+
+#remove NAs
+
+```{r}
+PvetVent <- na.omit(PvetVent)
+```
+
+#ANOVA
+
+```{r}
+sole_vent_anova <- aov(VentChange ~ DO, data = PvetVent)
+summary(sole_vent_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+sole_vent_tukey <- TukeyHSD(sole_vent_anova)
+print(sole_vent_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+sole_vent_cld <- multcompLetters4(sole_vent_anova, sole_vent_tukey)
+print(sole_vent_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+sole_vent_table <- group_by(PvetVent, DO) %>%
+  summarise(mean=mean(VentChange), quant = quantile(VentChange, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+sole_vent_cld <- as.data.frame.list(sole_vent_cld$DO)
+sole_vent_table$sole_vent_cld <- sole_vent_cld$Letters
+
+print(sole_vent_table)
+```
+
+#boxplot
+
+```{r}
+sole_vent_box <- ggplot(PvetVent, aes(DO, VentChange)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = sole_vent_table, aes(x = DO, y = quant, label = sole_vent_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=1.5, y=0, label="ANOVA, p = 0.00507", size=5) +
+  ylab("Change in Ventilation Rate (breaths/min)") + 
+  xlab("DO (mg/L)")
+```
+
+#SPECKLED SANDDABS
+
+#select only DO & VentChange
+
+```{r}
+CstigVent <- select(CstigComp, c("DO", "VentChange"))
+```
+
+#make DO a factor
+
+```{r}
+CstigVent$DO <- as.factor(CstigVent$DO)
+```
+
+#remove NAs
+
+```{r}
+CstigVent <- na.omit(CstigVent)
+```
+
+#ANOVA
+
+```{r}
+dab_vent_anova <- aov(VentChange ~ DO, data = CstigVent)
+summary(dab_vent_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+dab_vent_tukey <- TukeyHSD(dab_vent_anova)
+print(dab_vent_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+dab_vent_cld <- multcompLetters4(dab_vent_anova, dab_vent_tukey)
+print(dab_vent_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+dab_vent_table <- group_by(CstigVent, DO) %>%
+  summarise(mean=mean(VentChange), quant = quantile(VentChange, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the table
+dab_vent_cld <- as.data.frame.list(dab_vent_cld$DO)
+dab_vent_table$dab_vent_cld <- dab_vent_cld$Letters
+
+print(dab_vent_table)
+```
+
+#boxplot
+
+```{r}
+dab_vent_box <- ggplot(CstigVent, aes(DO, VentChange)) + 
+  geom_boxplot(fill = "lightgoldenrod2") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = dab_vent_table, aes(x = DO, y = quant, label = dab_vent_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=1.5, y=0, label="ANOVA, p < 0.001", size=5) +
+  ylab("Change in Ventilation Rate (breaths/min)") + 
+  xlab("DO (mg/L)")
+```
+
+#HEMATOCRIT BOXPLOTS
+
+#ENGLISH SOLE
+
+#select only DO & Hct
+
+```{r}
+PvetHct <- select(PvetComp, c("DO", "Hct"))
+```
+
+#make DO a factor
+
+```{r}
+PvetHct$DO <- as.factor(PvetHct$DO)
+```
+
+#remove NAs
+
+```{r}
+PvetHct <- na.omit(PvetHct)
+```
+
+#ANOVA
+
+```{r}
+sole_hct_anova <- aov(Hct ~ DO, data = PvetHct)
+summary(sole_hct_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+sole_hct_tukey <- TukeyHSD(sole_hct_anova)
+print(sole_hct_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+sole_hct_cld <- multcompLetters4(sole_hct_anova, sole_hct_tukey)
+print(sole_hct_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+sole_hct_table <- group_by(PvetHct, DO) %>%
+  summarise(mean=mean(Hct), quant = quantile(Hct, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+sole_hct_cld <- as.data.frame.list(sole_hct_cld$DO)
+sole_hct_table$sole_hct_cld <- sole_hct_cld$Letters
+
+print(sole_hct_table)
+```
+
+#boxplot
+
+```{r}
+sole_hct_box <- ggplot(PvetHct, aes(DO, Hct)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = sole_hct_table, aes(x = DO, y = quant, label = sole_hct_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=1.5, y=20, label="ANOVA, p = 0.0502", size=5) +
+  ylab("Hematocrit (%)") + 
+  xlab("DO (mg/L)")
+```
+
+
+#SPECKLED SANDDABS
+
+#select only DO & Hct
+
+```{r}
+CstigHct <- select(CstigComp, c("DO", "Hct"))
+```
+
+#make DO a factor
+
+```{r}
+CstigHct$DO <- as.factor(CstigHct$DO)
+```
+
+#remove NAs
+
+```{r}
+CstigHct <- na.omit(CstigHct)
+```
+
+#ANOVA
+
+```{r}
+dab_hct_anova <- aov(Hct ~ DO, data = CstigHct)
+summary(dab_hct_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+dab_hct_tukey <- TukeyHSD(dab_hct_anova)
+print(dab_hct_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+dab_hct_cld <- multcompLetters4(dab_hct_anova, dab_hct_tukey)
+print(dab_hct_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+dab_hct_table <- group_by(CstigHct, DO) %>%
+  summarise(mean=mean(Hct), quant = quantile(Hct, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+dab_hct_cld <- as.data.frame.list(dab_hct_cld$DO)
+dab_hct_table$dab_hct_cld <- dab_hct_cld$Letters
+
+print(dab_hct_table)
+```
+
+#boxplot
+
+```{r}
+dab_hct_box <- ggplot(CstigHct, aes(DO, Hct)) + 
+  geom_boxplot(fill = "lightgoldenrod2") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = dab_hct_table, aes(x = DO, y = quant, label = dab_hct_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=1.5, y=27, label="ANOVA, p = 0.0231", size=5) +
+  ylab("Hematocrit (%)") + 
+  xlab("DO (mg/L)")
+```
+
+#JOIN PLOTS with PATCHWORK
+
+#ENGLISH SOLE
+
+```{r}
+jpeg("EnglishSole_CompBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
+
+sole_hct_box / sole_vent_box
+
+dev.off()
+```
+
+#SPECKLED SANDDABS
+
+```{r}
+jpeg("SpeckledSanddabs_CompBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
+
+dab_hct_box / dab_vent_box
+
+dev.off()
+```
+
+#both species ventilation boxplots
+
+```{r}
+jpeg("VentilationBoxplots_BothSpecies.jpg", width = 14, height = 6, units="in", res=1200)
+
+sole_vent_box | dab_vent_box 
+
+dev.off()
+```
+
