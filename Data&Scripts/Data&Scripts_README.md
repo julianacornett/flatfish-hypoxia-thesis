@@ -34,6 +34,26 @@ Data was collected by Juliana Cornett following protocols in the [Ventilation](/
 
 Data was collected by Juliana Cornett following protocols in the [Respirometry](/Protocols/Respirometry) folder. 
 
+* [**"Englishsole_Allometric.csv"**](Metabolic_Responses/Englishsole_Allometric.csv)
+
+_csv file including fish ID, length (cm), weight (g), and pre-exposure MMR & SMR (mgO2/kg/hr)._
+
+* [**"AllometricScaling.Rmd"**](Metabolic_Responses/AllometricScaling.Rmd)
+
+_R script for linear models of fish size, length (cm) and weight (g), versus pre-exposure metabolic parameters, MMR & SMR (mgO2/kg/hr), to test for significance of allometric scaling._
+
+* [**"Englishsole_Metabolic.csv"**](Metabolic_Responses/Englishsole_Metabolic.csv)
+
+_csv file including fish ID, DO (mg/L), and pre- and post-exposure MMR & SMR (mgO2/kg/hr)._
+
+* [**"MetabolicPlots_LinearModelScatterplots.Rmd"**](Metabolic_Responses/MetabolicPlots_LinearModelScatterplots.Rmd)
+
+_R script for linear models & scatterplots of DO versus pre-exposure, as well as pre- to post-exposure change, metabolic parameters (SMR, MMR, and aerobic scope in mgO2/kg/hr), to test for relationship between DO level and metabolic parameters._
+
+* [**"MetabolicPlots_ANOVATukeyBoxplots.Rmd"**](Metabolic_Responses/MetabolicPlots_LinearModelScatterplots.Rmd)
+
+_R script for ANOVA with Tukey post-hoc test & boxplots of DO versus pre-exposure, as well as pre- to post-exposure change, metabolic parameters (SMR, MMR, and aerobic scope in mgO2/kg/hr), to compare mean metabolic parameters between DO levels._
+
 ## [Biochemical_Changes](Biochemical_Changes)
 
 Data was collected by Juliana Cornett following protocols in the [Tissue_Assays](/Protocols/Tissue_Assays) folder. 
