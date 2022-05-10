@@ -3,7 +3,7 @@ This repository includes all data, lab protocols, and R scripts associated with 
 
 ## [Protocols](Protocols)
 
-This folder includes lab protocols (.pdf) used for this thesis project. See [Protocols_README](Protocols/Protocols_README.md) within the [Protocols](Protocols) folder for more details. 
+This folder includes lab protocols (.pdf) used for this thesis project. The [Protocols](Protocols) folder is divided into sub-folders based on the type of physiological response measurements/methods (e.g., "Tissue_Assays"). See [Protocols_README](Protocols/Protocols_README.md) within the [Protocols](Protocols) folder for more details. 
 
 ## [Data and Scripts](Data&Scripts)
 
