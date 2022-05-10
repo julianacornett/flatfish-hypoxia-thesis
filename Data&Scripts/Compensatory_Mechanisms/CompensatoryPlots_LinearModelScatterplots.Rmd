@@ -5,9 +5,6 @@ date: "1/4/2022"
 output: html_document
 ---
 
-#Script to plot all compensatory mechanism parameters measured (Hct and Ventilation) in same plot with shared x-axis (DO)
-
-
 #install packages
 
 ```{r}
@@ -16,7 +13,6 @@ output: html_document
 #install.packages("tidyverse")
 #install.packages("ggpubr")
 #install.packages("patchwork")
-#install.packages("multcompView")
 ```
 
 #load libraries
@@ -27,7 +23,6 @@ library(ggplot2)
 library(tidyverse)
 library(ggpubr)
 library(patchwork)
-library(multcompView)
 ```
 
 #DATA PREPARATION 
@@ -35,25 +30,25 @@ library(multcompView)
 #read in csv file containing all measurements for each species
 
 ```{r}
-PvetAll <- read.csv("../Data/Pvet_AllVars.csv")
+soleAll <- read.csv("Englishsole_AllVars.csv")
 
-CstigAll <- read.csv("../Data/Cstig_AllVars.csv")
+dabAll <- read.csv("Speckledsanddab_AllVars.csv")
 ```
 
 #select only ID, Species, DO, Hct, AmbVent, and HypVent columns
 
 ```{r}
-PvetComp <- select(PvetAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
+soleComp <- select(soleAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
 
-CstigComp <- select(CstigAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
+dabComp <- select(dabAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
 ```
 
 #create ventilation rate change column (hypVent - AmbVent)
 
 ```{r}
-PvetComp$VentChange <- (PvetComp$HypVent - PvetComp$AmbVent)
+soleComp$VentChange <- (soleComp$HypVent - soleComp$AmbVent)
 
-CstigComp$VentChange <- (CstigComp$HypVent - CstigComp$AmbVent)
+dabComp$VentChange <- (dabComp$HypVent - dabComp$AmbVent)
 ```
 
 #SCATTERPLOTS & LINEAR MODEL - PLOTS COMBINED with PATCHWORK 
@@ -68,21 +63,21 @@ CstigComp$VentChange <- (CstigComp$HypVent - CstigComp$AmbVent)
 #ventilation
 
 ```{r}
-soleVent_lm <- lm(PvetComp$VentChange ~ PvetComp$DO)
+soleVent_lm <- lm(soleComp$VentChange ~ soleComp$DO)
 print(summary(soleVent_lm))
 ```
 
 #Hct
 
 ```{r}
-soleHct_lm <- lm(PvetComp$Hct ~ PvetComp$DO)
+soleHct_lm <- lm(soleComp$Hct ~ soleComp$DO)
 print(summary(soleHct_lm))
 ```
 
-```{r}
-jpeg("EnglishSole_CompScatter_Patchwork.jpg", width = 14, height = 11, units="in", res=1200)
+#scatterplots combined with patchwork 
 
-sole_comp_scatter_p1 <- ggplot(PvetComp, aes(x = DO, y = Hct)) +
+```{r}
+sole_comp_scatter_p1 <- ggplot(soleComp, aes(x = DO, y = Hct)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
@@ -92,7 +87,7 @@ sole_comp_scatter_p1 <- ggplot(PvetComp, aes(x = DO, y = Hct)) +
   ylab("Hematocrit (%)") +
   ylim(15,40)
 
-sole_comp_scatter_p2 <- ggplot(PvetComp, aes(x = DO, y = VentChange)) +
+sole_comp_scatter_p2 <- ggplot(soleComp, aes(x = DO, y = VentChange)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
@@ -102,32 +97,30 @@ sole_comp_scatter_p2 <- ggplot(PvetComp, aes(x = DO, y = VentChange)) +
   ylab("Change in Ventilation (breaths/min)")
 
 sole_comp_scatter_p1 / sole_comp_scatter_p2
-
-dev.off()
 ```
 
 #Speckled sanddabs
 
 #linear models 
 
-#ventilation
+#ventilation (nonlinear, quadratic model)
 
 ```{r}
-dabVent_lm <- lm(CstigComp$VentChange ~ CstigComp$DO)
+dabVent_lm <- lm(dabComp$VentChange ~ poly(dabComp$DO,2))
 print(summary(dabVent_lm))
 ```
 
 #Hct
 
 ```{r}
-dabHct_lm <- lm(CstigComp$Hct ~ CstigComp$DO)
+dabHct_lm <- lm(dabComp$Hct ~ dabComp$DO)
 print(summary(dabHct_lm))
 ```
 
-```{r}
-jpeg("Sanddabs_CompScatter_Patchwork.jpg", width = 14, height = 11, units="in", res=1200)
+#scatterplots combined with patchwork 
 
-dab_comp_scatter_p1 <- ggplot(CstigComp, aes(x = DO, y = Hct)) +
+```{r}
+dab_comp_scatter_p1 <- ggplot(dabComp, aes(x = DO, y = Hct)) +
   geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
@@ -137,7 +130,7 @@ dab_comp_scatter_p1 <- ggplot(CstigComp, aes(x = DO, y = Hct)) +
   ylab("Hematocrit (%)") +
   ylim(20,50)
 
-dab_comp_scatter_p2 <- ggplot(CstigComp, aes(DO, VentChange) ) +
+dab_comp_scatter_p2 <- ggplot(dabComp, aes(DO, VentChange) ) +
   geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
   theme_pubr() +
   stat_smooth(method='lm', color="black", se = FALSE, formula = y ~ poly(x, 2)) +
@@ -147,34 +140,4 @@ dab_comp_scatter_p2 <- ggplot(CstigComp, aes(DO, VentChange) ) +
   geom_text(aes(x=2.5, y=42, label= "R^2 == 0.7101~~~p < 0.001"), parse=TRUE, size=6)
 
 dab_comp_scatter_p1 / dab_comp_scatter_p2
-
-dev.off()
 ```
-
-```{r}
-jpeg("Ventilation_BothSpecies.jpg", width = 14, height = 6, units="in", res=1200)
-
-sole_vent_scatter_p1 <- ggplot(PvetComp, aes(x = DO, y = VentChange)) +
-  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
-  theme_pubr() +
-  geom_smooth(method = "lm", color ="black", se = FALSE) +
-  geom_text(aes(x=3, y=31, label= "R^2 == 0.23~~~p < 0.001"), parse=TRUE, size=6) +
-  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
-  xlab("DO (mg/L)") +
-  ylab("Change in Ventilation (breaths/min)")
-
-dab_vent_scatter_p2 <- ggplot(CstigComp, aes(DO, VentChange) ) +
-  geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
-  theme_pubr() +
-  stat_smooth(method='lm', color="black", se = FALSE, formula = y ~ poly(x, 2)) +
-  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
-  xlab("DO (mg/L)") +
-  ylab("Change in Ventilation Rate (breaths/min)") +
-  geom_text(aes(x=3, y=42, label= "R^2 == 0.7101~~~p < 0.001"), parse=TRUE, size=6)
-
-
-sole_vent_scatter_p1 | dab_vent_scatter_p2
-
-dev.off()
-```
-
