@@ -36,25 +36,25 @@ library(multcompView)
 #read in csv file containing all measurements for each species
 
 ```{r}
-PvetAll <- read.csv("../Data/Pvet_AllVars.csv")
+soleAll <- read.csv("Englishsole_AllVars.csv")
 
-CstigAll <- read.csv("../Data/Cstig_AllVars.csv")
+dabAll <- read.csv("Speckledsanddab_AllVars.csv")
 ```
 
 #select only ID, Species, DO, Lactate, SOD, and HIF columns for each
 
 ```{r}
-PvetComp <- select(PvetAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
+soleComp <- select(soleAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
 
-CstigComp <- select(CstigAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
+dabComp <- select(dabAll, c("ID", "Species", "DO", "Hct", "AmbVent", "HypVent"))
 ```
 
 #create ventilation rate change column (hypVent - AmbVent)
 
 ```{r}
-PvetComp$VentChange <- (PvetComp$HypVent - PvetComp$AmbVent)
+soleComp$VentChange <- (soleComp$HypVent - soleComp$AmbVent)
 
-CstigComp$VentChange <- (CstigComp$HypVent - CstigComp$AmbVent)
+dabComp$VentChange <- (dabComp$HypVent - dabComp$AmbVent)
 ```
 
 #VENTILATION BOXPLOTS
@@ -64,25 +64,25 @@ CstigComp$VentChange <- (CstigComp$HypVent - CstigComp$AmbVent)
 #select only DO & VentChange
 
 ```{r}
-PvetVent <- select(PvetComp, c("DO", "VentChange"))
+soleVent <- select(soleComp, c("DO", "VentChange"))
 ```
 
 #make DO a factor
 
 ```{r}
-PvetVent$DO <- as.factor(PvetVent$DO)
+soleVent$DO <- as.factor(soleVent$DO)
 ```
 
 #remove NAs
 
 ```{r}
-PvetVent <- na.omit(PvetVent)
+soleVent <- na.omit(soleVent)
 ```
 
 #ANOVA
 
 ```{r}
-sole_vent_anova <- aov(VentChange ~ DO, data = PvetVent)
+sole_vent_anova <- aov(VentChange ~ DO, data = soleVent)
 summary(sole_vent_anova)
 ```
 
@@ -104,7 +104,7 @@ print(sole_vent_cld)
 
 ```{r}
 # table with factors and 3rd quantile
-sole_vent_table <- group_by(PvetVent, DO) %>%
+sole_vent_table <- group_by(soleVent, DO) %>%
   summarise(mean=mean(VentChange), quant = quantile(VentChange, probs = 0.75)) %>%
   arrange(desc(mean))
 
@@ -118,7 +118,7 @@ print(sole_vent_table)
 #boxplot
 
 ```{r}
-sole_vent_box <- ggplot(PvetVent, aes(DO, VentChange)) + 
+sole_vent_box <- ggplot(soleVent, aes(DO, VentChange)) + 
   geom_boxplot(fill = "lightskyblue1") +
   geom_point(shape=1) +
   theme_pubr() +
@@ -134,25 +134,25 @@ sole_vent_box <- ggplot(PvetVent, aes(DO, VentChange)) +
 #select only DO & VentChange
 
 ```{r}
-CstigVent <- select(CstigComp, c("DO", "VentChange"))
+dabVent <- select(dabComp, c("DO", "VentChange"))
 ```
 
 #make DO a factor
 
 ```{r}
-CstigVent$DO <- as.factor(CstigVent$DO)
+dabVent$DO <- as.factor(dabVent$DO)
 ```
 
 #remove NAs
 
 ```{r}
-CstigVent <- na.omit(CstigVent)
+dabVent <- na.omit(dabVent)
 ```
 
 #ANOVA
 
 ```{r}
-dab_vent_anova <- aov(VentChange ~ DO, data = CstigVent)
+dab_vent_anova <- aov(VentChange ~ DO, data = dabVent)
 summary(dab_vent_anova)
 ```
 
@@ -174,7 +174,7 @@ print(dab_vent_cld)
 
 ```{r}
 # table with factors and 3rd quantile
-dab_vent_table <- group_by(CstigVent, DO) %>%
+dab_vent_table <- group_by(dabVent, DO) %>%
   summarise(mean=mean(VentChange), quant = quantile(VentChange, probs = 0.75)) %>%
   arrange(desc(mean))
 
@@ -188,7 +188,7 @@ print(dab_vent_table)
 #boxplot
 
 ```{r}
-dab_vent_box <- ggplot(CstigVent, aes(DO, VentChange)) + 
+dab_vent_box <- ggplot(dabVent, aes(DO, VentChange)) + 
   geom_boxplot(fill = "lightgoldenrod2") +
   geom_point(shape=1) +
   theme_pubr() +
@@ -206,25 +206,25 @@ dab_vent_box <- ggplot(CstigVent, aes(DO, VentChange)) +
 #select only DO & Hct
 
 ```{r}
-PvetHct <- select(PvetComp, c("DO", "Hct"))
+soleHct <- select(soleComp, c("DO", "Hct"))
 ```
 
 #make DO a factor
 
 ```{r}
-PvetHct$DO <- as.factor(PvetHct$DO)
+soleHct$DO <- as.factor(soleHct$DO)
 ```
 
 #remove NAs
 
 ```{r}
-PvetHct <- na.omit(PvetHct)
+soleHct <- na.omit(soleHct)
 ```
 
 #ANOVA
 
 ```{r}
-sole_hct_anova <- aov(Hct ~ DO, data = PvetHct)
+sole_hct_anova <- aov(Hct ~ DO, data = soleHct)
 summary(sole_hct_anova)
 ```
 
@@ -246,7 +246,7 @@ print(sole_hct_cld)
 
 ```{r}
 # table with factors and 3rd quantile
-sole_hct_table <- group_by(PvetHct, DO) %>%
+sole_hct_table <- group_by(soleHct, DO) %>%
   summarise(mean=mean(Hct), quant = quantile(Hct, probs = 0.75)) %>%
   arrange(desc(mean))
 
@@ -260,7 +260,7 @@ print(sole_hct_table)
 #boxplot
 
 ```{r}
-sole_hct_box <- ggplot(PvetHct, aes(DO, Hct)) + 
+sole_hct_box <- ggplot(soleHct, aes(DO, Hct)) + 
   geom_boxplot(fill = "lightskyblue1") +
   geom_point(shape=1) +
   theme_pubr() +
@@ -277,25 +277,25 @@ sole_hct_box <- ggplot(PvetHct, aes(DO, Hct)) +
 #select only DO & Hct
 
 ```{r}
-CstigHct <- select(CstigComp, c("DO", "Hct"))
+dabHct <- select(dabComp, c("DO", "Hct"))
 ```
 
 #make DO a factor
 
 ```{r}
-CstigHct$DO <- as.factor(CstigHct$DO)
+dabHct$DO <- as.factor(dabHct$DO)
 ```
 
 #remove NAs
 
 ```{r}
-CstigHct <- na.omit(CstigHct)
+dabHct <- na.omit(dabHct)
 ```
 
 #ANOVA
 
 ```{r}
-dab_hct_anova <- aov(Hct ~ DO, data = CstigHct)
+dab_hct_anova <- aov(Hct ~ DO, data = dabHct)
 summary(dab_hct_anova)
 ```
 
@@ -317,7 +317,7 @@ print(dab_hct_cld)
 
 ```{r}
 # table with factors and 3rd quantile
-dab_hct_table <- group_by(CstigHct, DO) %>%
+dab_hct_table <- group_by(dabHct, DO) %>%
   summarise(mean=mean(Hct), quant = quantile(Hct, probs = 0.75)) %>%
   arrange(desc(mean))
 
@@ -331,7 +331,7 @@ print(dab_hct_table)
 #boxplot
 
 ```{r}
-dab_hct_box <- ggplot(CstigHct, aes(DO, Hct)) + 
+dab_hct_box <- ggplot(dabHct, aes(DO, Hct)) + 
   geom_boxplot(fill = "lightgoldenrod2") +
   geom_point(shape=1) +
   theme_pubr() +
@@ -347,30 +347,39 @@ dab_hct_box <- ggplot(CstigHct, aes(DO, Hct)) +
 #ENGLISH SOLE
 
 ```{r}
-jpeg("EnglishSole_CompBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
-
 sole_hct_box / sole_vent_box
-
-dev.off()
 ```
 
 #SPECKLED SANDDABS
 
 ```{r}
-jpeg("SpeckledSanddabs_CompBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
-
 dab_hct_box / dab_vent_box
-
-dev.off()
 ```
 
-#both species ventilation boxplots
+#SPECIES COMPARISON (used in Table 4 in thesis)
+
+#join dataframes
 
 ```{r}
-jpeg("VentilationBoxplots_BothSpecies.jpg", width = 14, height = 6, units="in", res=1200)
-
-sole_vent_box | dab_vent_box 
-
-dev.off()
+bothComp <- rbind(soleComp, dabComp)
 ```
 
+#create ventilation rate change column
+
+```{r}
+bothComp$ventDiff <- (bothComp$HypVent - bothComp$AmbVent)
+```
+
+#two-way ANOVA with interaction for Hct
+
+```{r}
+Hct_aov_inter <- aov(Hct ~ as.factor(DO) * as.factor(Species), data = bothComp)
+summary(Hct_aov_inter)
+```
+
+#two-way anova with interaction for ventilation
+
+```{r}
+vent_aov_inter <- aov(ventDiff ~ as.factor(DO) * as.factor(Species), data = bothComp)
+summary(vent_aov_inter)
+```
