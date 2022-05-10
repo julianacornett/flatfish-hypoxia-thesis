@@ -35,11 +35,11 @@ Data was collected by Juliana Cornett following protocols in the [Ventilation](/
 
 _csv files for both species with fish ID, Species, DO (mg/L), weight (g), total length (cm), pre- and post-exposure ventilation rate (breaths/min), hematocrit (%), L-Lactate in muscle tissue (uM), superoxide dismutase (SOD) in gill tissue (U/mL), and hypoxia-inducibel factor-1a (HIF) in brain tissue (pg/mL)._
 
-* [**"CompensatoryPlots_LinearModelScatterplots.Rmd"**](Compensatory_Mechanisms/CompensatoryPlots_LinearModelScatterplots.Rmd)
+* [**"CompensatoryPlots_LinearModelScatterplots.Rmd"**](Compensatory_Mechanisms/CompensatoryPlots_LinearModelScatterplots.Rmd) (Figures 6 & 7 in thesis)
 
 _R script for linear models & scatterplots of DO versus compensatory mechanism (hematocrit or pre- to post-exposure change in ventilation rate), to test for relationship between DO level and compensatory mechanism measurements._
 
-* [**"CompensatoryPlots_ANOVATukeyBoxplots.Rmd"**](Compensatory_Mechanisms/CompensatoryPlots_ANOVATukeyBoxplots.Rmd)
+* [**"CompensatoryPlots_ANOVATukeyBoxplots.Rmd"**](Compensatory_Mechanisms/CompensatoryPlots_ANOVATukeyBoxplots.Rmd) (Figures 4 & 5 in thesis)
 
 _R script for ANOVA with Tukey post-hoc test & boxplots of DO versus compensatory mechanism (hematocrit or pre- to post-exposure change in ventilation rate), to compare mean compensatory mechanism measurements between DO levels._
 
