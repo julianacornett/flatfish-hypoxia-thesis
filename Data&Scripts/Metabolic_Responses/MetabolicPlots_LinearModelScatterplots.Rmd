@@ -1,0 +1,169 @@
+---
+title: "Metabolic Plots - Linear Model & Scatterplots"
+author: "Juliana Cornett"
+date: "1/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#install required packages (tidyverse & ggpubr)
+
+```{r}
+#install.packages("tidyverse")
+#install.packages("ggpubr")
+```
+
+#load libraries
+
+```{r}
+library(tidyverse)
+library(ggpubr)
+```
+
+#DATA PREPARATION
+
+#read in CSV files with MMR & SMR data for English sole at each DO level
+
+```{r}
+sole_scope <- read.csv("../Data/Scope_Pvetulus.csv")
+```
+
+```{r}
+sole_scope
+```
+
+#create new ambient and hypoxic aerobic scope columns by subtracting MMR - SMR
+
+```{r}
+sole_scope$AmbScope <- (sole_scope$AmbMMR - sole_scope$AmbSMR)
+sole_scope$HypScope <- (sole_scope$HypMMR - sole_scope$HypSMR)
+```
+
+#create aerobic scope difference column by subtracting hypoxic - ambient scope
+
+```{r}
+sole_scope$ScopeChange <- (sole_scope$HypScope - sole_scope$AmbScope)
+```
+
+#add MMR change and SMR change columns to scope dataframe
+
+```{r}
+sole_scope$MMRChange <- (sole_scope$HypMMR - sole_scope$AmbMMR)
+sole_scope$SMRChange <- (sole_scope$HypSMR - sole_scope$AmbSMR)
+```
+
+#linear models
+
+#post SMR
+
+```{r}
+post_SMR <- lm(sole_scope$HypSMR ~ sole_scope$DO_mgL)
+print(summary(post_SMR))
+```
+
+#change SMR
+
+```{r}
+change_SMR <- lm(sole_scope$SMRChange ~ sole_scope$DO_mgL)
+print(summary(change_SMR))
+```
+
+#post MMR
+
+```{r}
+post_MMR <- lm(sole_scope$HypMMR ~ sole_scope$DO_mgL)
+print(summary(post_MMR))
+```
+
+#change MMR
+
+```{r}
+change_MMR <- lm(sole_scope$MMRChange ~ sole_scope$DO_mgL)
+print(summary(change_MMR))
+```
+
+#post scope
+
+```{r}
+post_scope <- lm(sole_scope$HypScope ~ sole_scope$DO_mgL)
+print(summary(post_scope))
+```
+
+#change scope
+
+```{r}
+change_scope <- lm(sole_scope$ScopeChange ~ sole_scope$DO_mgL)
+print(summary(change_scope))
+```
+
+#POST-EXPOSURE + CHANGE SCATTERPLOTS with PATCHWORK
+
+```{r}
+jpeg("EnglishSole_MetabolicScatterplots_Patchwork.jpg", width = 14, height = 14, units="in", res=1200)
+
+SMR_Post_p1 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypSMR)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x.npc = "left", label.y.npc = "top", size=6, face="bold") +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) + 
+  xlab(NULL) +
+  ylab("Post-exposure SMR (mgO2/kg/hr)")
+
+SMR_Change_p2 <- ggplot(sole_scope, aes(x = DO_mgL, y = SMRChange)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x = 5.5, label.y.npc = "bottom", size=6, face="bold") +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) +
+  geom_hline(yintercept=0, linetype='dotted') + 
+  xlab(NULL) +
+  ylab("Change in SMR (mgO2/kg/hr)")
+
+MMR_Post_p3 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypMMR)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x.npc = "left", label.y.npc = "top", size=6, face="bold") +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) + 
+  xlab(NULL) +
+  ylab("Post-exposure MMR (mgO2/kg/hr)")
+
+MMR_Change_p4 <- ggplot(sole_scope, aes(x = DO_mgL, y = MMRChange)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  geom_text(aes(x=6.85, y=-600, label= "R^2 == 0.33~~~p < 0.001"), size=6, parse = TRUE) +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) +
+  geom_hline(yintercept=0, linetype='dotted') + 
+  xlab(NULL) +
+  ylab("Change in MMR (mgO2/kg/hr)")
+
+Scope_Post_p5 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypScope)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x.npc = "left", label.y.npc = "top", size=6, face="bold") +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) + 
+  xlab("DO (mg/L)") +
+  ylab("Post-exposure Aerobic Scope (mgO2/kg/hr)")
+
+Scope_Change_p6 <- ggplot(sole_scope, aes(x = DO_mgL, y = ScopeChange)) +
+  geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
+  theme_pubr() +
+  geom_smooth(method = "lm", color ="black", se = FALSE) +
+  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x = 5.5, label.y.npc = "bottom", size=6, face="bold") +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) +
+  geom_hline(yintercept=0, linetype='dotted') + 
+  xlab("DO (mg/L)") +
+  ylab("Change in Aerobic Scope (mgO2/kg/hr)")
+
+(SMR_Post_p1 | SMR_Change_p2)/
+  (MMR_Post_p3 | MMR_Change_p4)/
+  (Scope_Post_p5 | Scope_Change_p6)
+
+dev.off()
+```

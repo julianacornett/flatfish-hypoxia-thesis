@@ -1,0 +1,399 @@
+---
+title: "MetabolicPlots - ANOVA, Tukey HSD, & Boxplots"
+author: "Juliana Cornett"
+date: "3/27/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#install required packages (tidyverse, ggpubr, multcompView, and pathchwork)
+
+```{r}
+#install.packages("tidyverse")
+#install.packages("ggpubr")
+#install.packages("patchwork")
+#install.packages("multcompView")
+```
+
+#load libraries
+
+```{r}
+library(tidyverse)
+library(ggpubr)
+```
+
+#read in CSV files with MMR & SMR data for English sole at each DO level
+
+```{r}
+sole_scope <- read.csv("../Data/Scope_Pvetulus.csv")
+```
+
+#create new ambient and hypoxic aerobic scope columns by subtracting MMR - SMR
+
+```{r}
+sole_scope$AmbScope <- (sole_scope$AmbMMR - sole_scope$AmbSMR)
+sole_scope$HypScope <- (sole_scope$HypMMR - sole_scope$HypSMR)
+```
+
+#create aerobic scope difference column by subtracting hypoxic - ambient scope
+
+```{r}
+sole_scope$ScopeChange <- (sole_scope$HypScope - sole_scope$AmbScope)
+```
+
+#add MMR change and SMR change columns to scope dataframe
+
+```{r}
+sole_scope$MMRChange <- (sole_scope$HypMMR - sole_scope$AmbMMR)
+sole_scope$SMRChange <- (sole_scope$HypSMR - sole_scope$AmbSMR)
+```
+
+#POST-EXPOSURE BOXPLOTS
+
+#SMR
+
+#select only DO & HypSMR (post-exposure SMR)
+
+```{r}
+PostSMR <- select(sole_scope, c("DO_mgL", "HypSMR"))
+```
+
+#make DO a factor
+
+```{r}
+PostSMR$DO_mgL <- as.factor(PostSMR$DO_mgL)
+```
+
+#remove NAs
+
+```{r}
+PostSMR <- na.omit(PostSMR)
+```
+
+#ANOVA
+
+```{r}
+postSMR_anova <- aov(HypSMR ~ DO_mgL, data = PostSMR)
+summary(postSMR_anova)
+```
+
+#boxplot
+
+```{r}
+postSMR_box <- ggplot(PostSMR, aes(DO_mgL, HypSMR)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(x=1.5, y=600, label="ANOVA, p = 0.893", size=5) +
+  ylab("Post-exposure SMR (mgO2/kg/hr)") + 
+  xlab("DO (mg/L)")
+```
+
+#MMR
+
+#select only DO & HypMMR (post-exposure MMR)
+
+```{r}
+PostMMR <- select(sole_scope, c("DO_mgL", "HypMMR"))
+```
+
+#make DO a factor
+
+```{r}
+PostMMR$DO_mgL <- as.factor(PostMMR$DO_mgL)
+```
+
+#remove NAs
+
+```{r}
+PostMMR <- na.omit(PostMMR)
+```
+
+#ANOVA
+
+```{r}
+postMMR_anova <- aov(HypMMR ~ DO_mgL, data = PostMMR)
+summary(postMMR_anova)
+```
+
+#boxplot
+
+```{r}
+postMMR_box <- ggplot(PostMMR, aes(DO_mgL, HypMMR)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(x=1.5, y=600, label="ANOVA, p = 0.588", size=5) +
+  ylab("Post-exposure MMR (mgO2/kg/hr)") + 
+  xlab("DO (mg/L)")
+```
+
+#AEROBIC SCOPE
+
+#select only DO & HypScope (post-exposure aerobic scope)
+
+```{r}
+PostScope <- select(sole_scope, c("DO_mgL", "HypScope"))
+```
+
+#make DO a factor
+
+```{r}
+PostScope$DO_mgL <- as.factor(PostScope$DO_mgL)
+```
+
+#remove NAs
+
+```{r}
+PostScope <- na.omit(PostScope)
+```
+
+#ANOVA
+
+```{r}
+postScope_anova <- aov(HypScope ~ DO_mgL, data = PostScope)
+summary(postScope_anova)
+```
+
+#boxplot
+
+```{r}
+postScope_box <- ggplot(PostScope, aes(DO_mgL, HypScope)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(x=1.5, y=-50, label="ANOVA, p = 0.0688", size=5) +
+  ylab("Post-exposure Aerobic Scope (mgO2/kg/hr)") + 
+  xlab("DO (mg/L)")
+```
+
+#PRE TO POST-EXPOSURE CHANGE BOXPLOTS
+
+#SMR
+
+#select only DO & SMRChange (pre to post-exposure change in SMR)
+
+```{r}
+changeSMR <- select(sole_scope, c("DO_mgL", "SMRChange"))
+```
+
+#make DO a factor
+
+```{r}
+changeSMR$DO_mgL <- as.factor(changeSMR$DO_mgL)
+```
+
+#remove NAs
+
+```{r}
+changeSMR <- na.omit(changeSMR)
+```
+
+#ANOVA
+
+```{r}
+changeSMR_anova <- aov(SMRChange ~ DO_mgL, data = changeSMR)
+summary(changeSMR_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+changeSMR_tukey <- TukeyHSD(changeSMR_anova)
+print(changeSMR_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+changeSMR_cld <- multcompLetters4(changeSMR_anova, changeSMR_tukey)
+print(changeSMR_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+changeSMR_table <- group_by(changeSMR, DO_mgL) %>%
+  summarise(mean=mean(SMRChange), quant = quantile(SMRChange, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+changeSMR_cld <- as.data.frame.list(changeSMR_cld$DO_mgL)
+changeSMR_table$changeSMR_cld <- changeSMR_cld$Letters
+
+print(changeSMR_table)
+```
+
+#boxplot
+
+```{r}
+changeSMR_box <- ggplot(changeSMR, aes(DO_mgL, SMRChange)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = changeSMR_table, aes(x = DO_mgL, y = quant, label = changeSMR_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=1.5, y=-300, label="ANOVA, p = 0.0366", size=5) +
+  ylab("Change in SMR (mgO2/kg/hr)") + 
+  xlab("DO (mg/L)")
+```
+
+#MMR
+
+#select only DO & MMRChange (pre to post-exposure change in MMR)
+
+```{r}
+changeMMR <- select(sole_scope, c("DO_mgL", "MMRChange"))
+```
+
+#make DO a factor
+
+```{r}
+changeMMR$DO_mgL <- as.factor(changeMMR$DO_mgL)
+```
+
+#remove NAs
+
+```{r}
+changeMMR <- na.omit(changeMMR)
+```
+
+#ANOVA
+
+```{r}
+changeMMR_anova <- aov(MMRChange ~ DO_mgL, data = changeMMR)
+summary(changeMMR_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+changeMMR_tukey <- TukeyHSD(changeMMR_anova)
+print(changeMMR_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+changeMMR_cld <- multcompLetters4(changeMMR_anova, changeMMR_tukey)
+print(changeMMR_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+changeMMR_table <- group_by(changeMMR, DO_mgL) %>%
+  summarise(mean=mean(MMRChange), quant = quantile(MMRChange, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+changeMMR_cld <- as.data.frame.list(changeMMR_cld$DO_mgL)
+changeMMR_table$changeMMR_cld <- changeMMR_cld$Letters
+
+print(changeMMR_table)
+```
+
+#boxplot
+
+```{r}
+changeMMR_box <- ggplot(changeMMR, aes(DO_mgL, MMRChange)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = changeMMR_table, aes(x = DO_mgL, y = quant, label = changeMMR_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=2.25, y=-700, label="ANOVA, p < 0.001", size=5) +
+  ylab("Change in MMR (mgO2/kg/hr)") + 
+  xlab("DO (mg/L)")
+```
+
+#AEROBIC SCOPE
+
+#select only DO & ScopeChange (pre to post-exposure change in Aerobic Scope)
+
+```{r}
+changeScope <- select(sole_scope, c("DO_mgL", "ScopeChange"))
+```
+
+#make DO a factor
+
+```{r}
+changeScope$DO_mgL <- as.factor(changeScope$DO_mgL)
+```
+
+#remove NAs
+
+```{r}
+changeScope <- na.omit(changeScope)
+```
+
+#ANOVA
+
+```{r}
+changeScope_anova <- aov(ScopeChange ~ DO_mgL, data = changeScope)
+summary(changeScope_anova)
+```
+
+#Tukey HSD post-hoc test
+
+```{r}
+changeScope_tukey <- TukeyHSD(changeScope_anova)
+print(changeScope_tukey)
+```
+
+#compact letter display of Tukey HSD results
+
+```{r}
+changeScope_cld <- multcompLetters4(changeScope_anova, changeScope_tukey)
+print(changeScope_cld)
+```
+
+#make a dataframe
+
+```{r}
+# table with factors and 3rd quantile
+changeScope_table <- group_by(changeScope, DO_mgL) %>%
+  summarise(mean=mean(ScopeChange), quant = quantile(ScopeChange, probs = 0.75)) %>%
+  arrange(desc(mean))
+
+# extracting the compact letter display and adding to the Tk table
+changeScope_cld <- as.data.frame.list(changeScope_cld$DO_mgL)
+changeScope_table$changeScope_cld <- changeScope_cld$Letters
+
+print(changeScope_table)
+```
+
+#boxplot
+
+```{r}
+changeScope_box <- ggplot(changeScope, aes(DO_mgL, ScopeChange)) + 
+  geom_boxplot(fill = "lightskyblue1") +
+  geom_point(shape=1) +
+  theme_pubr() +
+  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
+  geom_text(data = changeScope_table, aes(x = DO_mgL, y = quant, label = changeScope_cld, vjust=-1, hjust =-1)) +
+  geom_text(x=2.25, y=-575, label="ANOVA, p = 0.0539", size=5) +
+  ylab("Change in Aerobic Scope (mgO2/kg/hr)") + 
+  xlab("DO (mg/L)")
+```
+
+#BOXPLOTS
+
+```{r} 
+jpeg("EnglishSole_MetabolicBoxplots_Patchwork.jpg", width = 14, height = 16, units="in", res=1200)
+
+(postSMR_box | changeSMR_box)/
+  (postMMR_box | changeMMR_box)/
+  (postScope_box | changeScope_box)
+
+dev.off()
+```
+
