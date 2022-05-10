@@ -28,11 +28,7 @@ library(ggpubr)
 #read in CSV files with MMR & SMR data for English sole at each DO level
 
 ```{r}
-sole_scope <- read.csv("../Data/Scope_Pvetulus.csv")
-```
-
-```{r}
-sole_scope
+sole_scope <- read.csv("Englishsole_Metabolic.csv")
 ```
 
 #create new ambient and hypoxic aerobic scope columns by subtracting MMR - SMR
@@ -102,8 +98,6 @@ print(summary(change_scope))
 #POST-EXPOSURE + CHANGE SCATTERPLOTS with PATCHWORK
 
 ```{r}
-jpeg("EnglishSole_MetabolicScatterplots_Patchwork.jpg", width = 14, height = 14, units="in", res=1200)
-
 SMR_Post_p1 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypSMR)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
@@ -164,6 +158,4 @@ Scope_Change_p6 <- ggplot(sole_scope, aes(x = DO_mgL, y = ScopeChange)) +
 (SMR_Post_p1 | SMR_Change_p2)/
   (MMR_Post_p3 | MMR_Change_p4)/
   (Scope_Post_p5 | Scope_Change_p6)
-
-dev.off()
 ```
