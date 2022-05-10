@@ -6,7 +6,7 @@ This folder includes all data files (.csv) and R scripts (.Rmd) used for data an
 
 Data was downloaded from the [National Estuarine Research Reserve Centralized Data Management Office](http://cdmo.baruch.sc.edu/dges/).
 
-* [**"ElkhornSloughDO.Rmd"**](ElkhornSlough_DO/ElkhornSloughDO.Rmd)
+* [**"ElkhornSloughDO.Rmd"**](ElkhornSlough_DO/ElkhornSloughDO.Rmd) (Figure 1 in thesis)
 
 _R script for plotting dissolved oxygen (DO) data from 4 water quality monitoring sites in Elkhorn Slough across different timescales._
 
@@ -38,7 +38,7 @@ Data was collected by Juliana Cornett following protocols in the [Respirometry](
 
 _csv file including fish ID, length (cm), weight (g), and pre-exposure MMR & SMR (mgO2/kg/hr)._
 
-* [**"AllometricScaling.Rmd"**](Metabolic_Responses/AllometricScaling.Rmd)
+* [**"AllometricScaling.Rmd"**](Metabolic_Responses/AllometricScaling.Rmd) (Table 3 in thesis)
 
 _R script for linear models of fish size, length (cm) and weight (g), versus pre-exposure metabolic parameters, MMR & SMR (mgO2/kg/hr), to test for significance of allometric scaling._
 
@@ -46,11 +46,11 @@ _R script for linear models of fish size, length (cm) and weight (g), versus pre
 
 _csv file including fish ID, DO (mg/L), and pre- and post-exposure MMR & SMR (mgO2/kg/hr)._
 
-* [**"MetabolicPlots_LinearModelScatterplots.Rmd"**](Metabolic_Responses/MetabolicPlots_LinearModelScatterplots.Rmd)
+* [**"MetabolicPlots_LinearModelScatterplots.Rmd"**](Metabolic_Responses/MetabolicPlots_LinearModelScatterplots.Rmd) (Figure 9 in thesis)
 
 _R script for linear models & scatterplots of DO versus pre-exposure, as well as pre- to post-exposure change, metabolic parameters (SMR, MMR, and aerobic scope in mgO2/kg/hr), to test for relationship between DO level and metabolic parameters._
 
-* [**"MetabolicPlots_ANOVATukeyBoxplots.Rmd"**](Metabolic_Responses/MetabolicPlots_ANOVATukeyBoxplots.Rmd)
+* [**"MetabolicPlots_ANOVATukeyBoxplots.Rmd"**](Metabolic_Responses/MetabolicPlots_ANOVATukeyBoxplots.Rmd) (Figure 8 in thesis)
 
 _R script for ANOVA with Tukey post-hoc test & boxplots of DO versus pre-exposure, as well as pre- to post-exposure change, metabolic parameters (SMR, MMR, and aerobic scope in mgO2/kg/hr), to compare mean metabolic parameters between DO levels._
 
