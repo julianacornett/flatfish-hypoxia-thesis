@@ -24,5 +24,11 @@ _csv file including DO data from South Marsh water quality monitoring site from 
 
 _csv file including DO data from Vierra Mouth water quality monitoring site from summer 2021, including station name, timestamp, and DO (mg/L). Data was downloaded from the [National Estuarine Research Reserve Centralized Data Management Office](http://cdmo.baruch.sc.edu/dges/)._
 
-## [ElkhornSlough_DO](ElkhornSlough_DO)
+## [Compensatory_Mechanisms](Compensatory_Mechanisms)
+
+## [Metabolic_Responses](Metabolic_Responses)
+
+## [Biochemical_Changes](Biochemical_Changes)
+
+## [PCA](PCA)
 
