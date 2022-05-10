@@ -344,13 +344,13 @@ dab_hct_box <- ggplot(dabHct, aes(DO, Hct)) +
 
 #JOIN PLOTS with PATCHWORK
 
-#ENGLISH SOLE
+#ENGLISH SOLE (Figure 4 in thesis)
 
 ```{r}
 sole_hct_box / sole_vent_box
 ```
 
-#SPECKLED SANDDABS
+#SPECKLED SANDDABS (Figure 5 in thesis)
 
 ```{r}
 dab_hct_box / dab_vent_box

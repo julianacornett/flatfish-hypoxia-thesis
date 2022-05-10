@@ -74,7 +74,7 @@ soleHct_lm <- lm(soleComp$Hct ~ soleComp$DO)
 print(summary(soleHct_lm))
 ```
 
-#scatterplots combined with patchwork 
+#scatterplots combined with patchwork (Figure 6 in thesis)
 
 ```{r}
 sole_comp_scatter_p1 <- ggplot(soleComp, aes(x = DO, y = Hct)) +
@@ -117,7 +117,7 @@ dabHct_lm <- lm(dabComp$Hct ~ dabComp$DO)
 print(summary(dabHct_lm))
 ```
 
-#scatterplots combined with patchwork 
+#scatterplots combined with patchwork (Figure 7 in thesis)
 
 ```{r}
 dab_comp_scatter_p1 <- ggplot(dabComp, aes(x = DO, y = Hct)) +
