@@ -30,6 +30,11 @@ _csv file including DO data from Vierra Mouth water quality monitoring site from
 
 Data was collected by Juliana Cornett following protocols in the [Ventilation](/Protocols/Ventilation) and [Blood_Sampling](/Protocols/Blood_Sampling) folders. 
 
+* [**"Englishsole_AllVars.csv"**](Compensatory_Mechanisms/Englishsole_AllVars.csv)
+* [**"Speckledsanddab_AllVars.csv"**](Compensatory_Mechanisms/Speckledsanddab_AllVars.csv)
+
+_csv files for both species with fish ID, Species, DO (mg/L), weight (g), total length (cm), pre- and post-exposure ventilation rate (breaths/min), hematocrit (%), L-Lactate in muscle tissue (uM), superoxide dismutase (SOD) in gill tissue (U/mL), and hypoxia-inducibel factor-1a (HIF) in brain tissue (pg/mL)._
+
 ## [Metabolic_Responses](Metabolic_Responses)
 
 Data was collected by Juliana Cornett following protocols in the [Respirometry](/Protocols/Respirometry) folder. 
@@ -58,7 +63,19 @@ _R script for ANOVA with Tukey post-hoc test & boxplots of DO versus pre-exposur
 
 Data was collected by Juliana Cornett following protocols in the [Tissue_Assays](/Protocols/Tissue_Assays) folder. 
 
+* [**"Englishsole_AllVars.csv"**](Biochemical_Changes/Englishsole_AllVars.csv)
+* [**"Speckledsanddab_AllVars.csv"**](Biochemical_Changes/Speckledsanddab_AllVars.csv)
+
+_csv files for both species with fish ID, Species, DO (mg/L), weight (g), total length (cm), pre- and post-exposure ventilation rate (breaths/min), hematocrit (%), L-Lactate in muscle tissue (uM), superoxide dismutase (SOD) in gill tissue (U/mL), and hypoxia-inducibel factor-1a (HIF) in brain tissue (pg/mL)._
+
 ## [PCA](PCA)
 
 This analysis includes data from multiple physiological response measurements. 
+
+* [**"Englishsole_AllVars.csv"**](PCA/Englishsole_AllVars.csv)
+* [**"Speckledsanddab_AllVars.csv"**](PCA/Speckledsanddab_AllVars.csv)
+
+_csv files for both species with fish ID, Species, DO (mg/L), weight (g), total length (cm), pre- and post-exposure ventilation rate (breaths/min), hematocrit (%), L-Lactate in muscle tissue (uM), superoxide dismutase (SOD) in gill tissue (U/mL), and hypoxia-inducibel factor-1a (HIF) in brain tissue (pg/mL)._
+
+
 
