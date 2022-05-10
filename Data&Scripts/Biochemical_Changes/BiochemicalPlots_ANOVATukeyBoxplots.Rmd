@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 #install packages
 
 ```{r}
@@ -35,9 +36,9 @@ library(multcompView)
 #read in csv file containing all measurements for each species
 
 ```{r}
-PvetAll <- read.csv("../Data/Pvet_AllVars.csv")
+soleAll <- read.csv("Englishsole_AllVars.csv")
 
-CstigAll <- read.csv("../Data/Cstig_AllVars.csv")
+dabAll <- read.csv("Speckledsanddab_AllVars.csv")
 ```
 
 #HIF BOXPLOTS
@@ -47,7 +48,7 @@ CstigAll <- read.csv("../Data/Cstig_AllVars.csv")
 #select only DO & HIF
 
 ```{r}
-soleHIF <- select(PvetAll, c("DO", "HIF"))
+soleHIF <- select(soleAll, c("DO", "HIF"))
 ```
 
 #make DO a factor
@@ -87,7 +88,7 @@ sole_hif_box <- ggplot(soleHIF, aes(DO, HIF)) +
 #select only DO & HIF
 
 ```{r}
-dabHIF <- select(CstigAll, c("DO", "HIF"))
+dabHIF <- select(dabAll, c("DO", "HIF"))
 ```
 
 #make DO a factor
@@ -129,7 +130,7 @@ dab_hif_box <- ggplot(dabHIF, aes(DO, HIF)) +
 #select only DO & Lactate
 
 ```{r}
-soleLac <- select(PvetAll, c("DO", "Lactate"))
+soleLac <- select(soleAll, c("DO", "Lactate"))
 ```
 
 #make DO a factor
@@ -199,7 +200,7 @@ sole_lac_box <- ggplot(soleLac, aes(DO, Lactate)) +
 #select only DO & Lactate
 
 ```{r}
-dabLac <- select(CstigAll, c("DO", "Lactate"))
+dabLac <- select(dabAll, c("DO", "Lactate"))
 ```
 
 #make DO a factor
@@ -264,17 +265,6 @@ dab_lac_box <- ggplot(dabLac, aes(DO, Lactate)) +
   xlab("DO (mg/L)")
 ```
 
-#Lactate boxplots only
-
-```{r}
-jpeg("Lactate_Boxplots.jpg", width = 12, height = 5, units="in", res=1200)
-
-(sole_lac_box | dab_lac_box)
-
-dev.off()
-```
-
-
 #SOD BOXPLOTS
 
 #ENGLISH SOLE 
@@ -282,7 +272,7 @@ dev.off()
 #select only DO & SOD
 
 ```{r}
-soleSOD <- select(PvetAll, c("DO", "SOD"))
+soleSOD <- select(soleAll, c("DO", "SOD"))
 ```
 
 #make DO a factor
@@ -347,26 +337,12 @@ sole_sod_box <- ggplot(soleSOD, aes(DO, SOD)) +
   xlab("DO (mg/L)")
 ```
 
-```{r}
-jpeg("EnglishSole_SODBoxplot.jpg", width = 7, height = 5, units="in", res=1200)
-ggplot(soleSOD, aes(DO, SOD)) + 
-  geom_boxplot(fill = "lightskyblue1") +
-  geom_point(shape=1) +
-  theme_pubr() +
-  theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
-  geom_text(data = sole_sod_table, aes(x = DO, y = quant, label = sole_sod_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=5.5, y=2.75, label="ANOVA, p = 0.0434", size=5) +
-  ylab("SOD (U/mL)") + 
-  xlab("DO (mg/L)")
-dev.off()
-```
-
 #SPECKLED SANDDABS
 
 #select only DO & SOD
 
 ```{r}
-dabSOD <- select(CstigAll, c("DO", "SOD"))
+dabSOD <- select(dabAll, c("DO", "SOD"))
 ```
 
 #make DO a factor
@@ -401,36 +377,26 @@ dab_sod_box <- ggplot(dabSOD, aes(DO, SOD)) +
   xlab("DO (mg/L)")
 ```
 
-
 #JOIN PLOTS with PATCHWORK
 
-#ENGLISH SOLE
+#ENGLISH SOLE (Figure 10 in thesis)
 
 ```{r}
-jpeg("EnglishSole_BiochemBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
-
 sole_hif_box / sole_lac_box / sole_sod_box
-
-dev.off()
 ```
 
-#SPECKLED SANDDABS
+#SPECKLED SANDDABS (Figure 11 in thesis)
 
 ```{r}
-jpeg("SpeckledSanddabs_BiochemBoxplots.jpg", width = 8.5, height = 11, units="in", res=1200)
-
 dab_hif_box / dab_lac_box / dab_sod_box
-
-dev.off()
 ```
 
-#ANOVAs for Species Comparison Table p-values in Thesis
+#ANOVAs for Species Comparison Table p-values in Thesis (Table 4)
 
 #dataframe with both species
 
 ```{r}
-BothBiochem <- rbind(PvetAll, CstigAll)
-BothBiochem
+BothBiochem <- rbind(soleAll, dabAll)
 ```
 
 #anovas of each metric as a function of DO and Species + interaction
