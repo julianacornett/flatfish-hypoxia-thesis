@@ -9,85 +9,38 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#install required packages (tidyverse & ggpubr)
+#read in CSV file with weight and ambient metabolic rate data
 
 ```{r}
-#install.packages("tidyverse")
-#install.packages("ggpubr")
+sole_AmbMet <- read.csv("Englishsole_Allometric.csv")
 ```
 
-#load libraries
+#LINEAR MODELS (used for Table 3 in thesis)
+
+#linear model function of weight (g) vs. ambient SMR 
 
 ```{r}
-library(tidyverse)
-library(ggpubr)
-```
-
-#read in CSV file with weight and ambient metabolic rate date
-
-```{r}
-Pvet_Met <- read.csv("../Data/Pvet_Met.csv")
-```
-
-#linear model function, with weight in g as x-axis and ambient SMR as y-axis
-
-```{r}
-lm_scaleSMR <- lm(Pvet_Met$AmbSMR ~ Pvet_Met$Weight_g)
+lm_scaleSMR <- lm(sole_AmbMet$AmbSMR ~ sole_AmbMet$Weight_g)
 print(summary(lm_scaleSMR))
 ```
 
-#linear model function, with weight in g as x-axis and ambient MMR as y-axis
+#linear model function of weight (g) versus ambient MMR 
 
 ```{r}
-lm_scaleMMR <- lm(Pvet_Met$AmbMRR ~ Pvet_Met$Weight_g)
+lm_scaleMMR <- lm(sole_AmbMet$AmbMMR ~ sole_AmbMet$Weight_g)
 print(summary(lm_scaleMMR))
 ```
 
-#linear model function, with total length in cm as x-axis and ambient SMR as y-axis
+#linear model function of total length (cm) versus ambient SMR
 
 ```{r}
-lm_scaleSMR_length <- lm(Pvet_Met$AmbSMR ~ Pvet_Met$Length_cm)
+lm_scaleSMR_length <- lm(sole_AmbMet$AmbSMR ~ sole_AmbMet$Length_cm)
 print(summary(lm_scaleSMR_length))
 ```
 
-#linear model function, with total length in cm as x-axis and ambient MMR as y-axis
+#linear model function of total length (cm) versus ambient MMR
 
 ```{r}
-lm_scaleMMR_length <- lm(Pvet_Met$AmbMRR ~ Pvet_Met$Length_cm)
+lm_scaleMMR_length <- lm(sole_AmbMet$AmbMMR ~ sole_AmbMet$Length_cm)
 print(summary(lm_scaleMMR_length))
 ```
-
-#plot the regression with ggplot/ggpubr
-
-```{r}
-#pdf("Pvet_MetScaling.pdf")
-ggplot(Pvet_Met, aes(x = Weight_g, y = AmbSMR)) + 
-  geom_point(color ="steelblue1") + 
-  theme_pubr() +
-  geom_smooth(method = "lm", color ="goldenrod1", fill ="steelblue1") +
-  xlab("Weight (g)") + 
-  ylab("Ambient SMR (mg/kg/hr)") +
-  theme(axis.title=element_text(size=18,face="bold")) +
-  stat_regline_equation(label.x = 2, label.y = 275, size=6, face="bold") +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")),
-           label.x = 2, label.y = 325, size=6, face="bold")
-#dev.off()
-```
-
-#plot the regression with ggplot/ggpubr
-
-```{r}
-#pdf("Pvet_MetScaling.pdf")
-ggplot(Pvet_Met, aes(x = Weight_g, y = AmbMRR)) + 
-  geom_point(color ="steelblue1") + 
-  theme_pubr() +
-  geom_smooth(method = "lm", color ="goldenrod1", fill ="steelblue1") +
-  xlab("Weight (g)") + 
-  ylab("Ambient MMR (mg/kg/hr)") +
-  theme(axis.title=element_text(size=18,face="bold")) +
-  stat_regline_equation(label.x = 2, label.y = 275, size=6, face="bold") +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")),
-           label.x = 2, label.y = 325, size=6, face="bold")
-#dev.off()
-```
-
