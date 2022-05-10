@@ -50,7 +50,7 @@ _csv file including fish ID, DO (mg/L), and pre- and post-exposure MMR & SMR (mg
 
 _R script for linear models & scatterplots of DO versus pre-exposure, as well as pre- to post-exposure change, metabolic parameters (SMR, MMR, and aerobic scope in mgO2/kg/hr), to test for relationship between DO level and metabolic parameters._
 
-* [**"MetabolicPlots_ANOVATukeyBoxplots.Rmd"**](Metabolic_Responses/MetabolicPlots_LinearModelScatterplots.Rmd)
+* [**"MetabolicPlots_ANOVATukeyBoxplots.Rmd"**](Metabolic_Responses/MetabolicPlots_ANOVATukeyBoxplots.Rmd)
 
 _R script for ANOVA with Tukey post-hoc test & boxplots of DO versus pre-exposure, as well as pre- to post-exposure change, metabolic parameters (SMR, MMR, and aerobic scope in mgO2/kg/hr), to compare mean metabolic parameters between DO levels._
 
