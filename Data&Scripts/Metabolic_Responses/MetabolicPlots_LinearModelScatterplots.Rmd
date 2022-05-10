@@ -95,7 +95,7 @@ change_scope <- lm(sole_scope$ScopeChange ~ sole_scope$DO_mgL)
 print(summary(change_scope))
 ```
 
-#POST-EXPOSURE + CHANGE SCATTERPLOTS with PATCHWORK
+#POST-EXPOSURE + CHANGE SCATTERPLOTS with PATCHWORK (Figure 9 in thesis)
 
 ```{r}
 SMR_Post_p1 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypSMR)) +

@@ -387,7 +387,7 @@ changeScope_box <- ggplot(changeScope, aes(DO_mgL, ScopeChange)) +
   xlab("DO (mg/L)")
 ```
 
-#BOXPLOTS with patchwork
+#BOXPLOTS with patchwork (Figure 8 in thesis)
 
 ```{r} 
 (postSMR_box | changeSMR_box)/
