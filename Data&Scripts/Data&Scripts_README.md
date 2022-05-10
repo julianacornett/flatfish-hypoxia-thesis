@@ -40,5 +40,5 @@ Data was collected by Juliana Cornett following protocols in the [Tissue_Assays]
 
 ## [PCA](PCA)
 
-This analysis includes data from multiple physiological responses measurements. 
+This analysis includes data from multiple physiological response measurements. 
 
