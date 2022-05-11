@@ -1,5 +1,5 @@
 ---
-title: "Pvet_PCA"
+title: "EnglishSole_PCA"
 author: "Juliana Cornett"
 date: "12/9/2021"
 output: html_document
@@ -36,40 +36,38 @@ library(patchwork)
 #read in csv file containing all variables associated with P. vetulus fish from the ventilation trials (ID, Species, DO, weight, length, Hct, Vent, Lac, SOD, and HIF)
 
 ```{r}
-Pvet_vars <- read.csv("../Data/Pvet_AllVars.csv")
+sole_vars <- read.csv("Englishsole_AllVars.csv")
 ```
 
 #remove all rows with NA since PCA doesn't work with missing values
 
 ```{r}
-Pvet_na <- na.omit(Pvet_vars)
+sole_na <- na.omit(sole_vars)
 ```
 
 #run PCA on all quantitative variables(columns 7-11), excluding ID, species, DO, length, weight, and ambient ventilation rate
 
 ```{r}
-Pvet.pca <- prcomp(Pvet_na[,c(7:11)], center = TRUE,scale. = TRUE)
-summary(Pvet.pca)
+sole.pca <- prcomp(sole_na[,c(7:11)], center = TRUE,scale. = TRUE)
+summary(sole.pca)
 ```
 
-#plot relative contribution of variables to principle components
+#plot relative contribution of variables to principle components (Figure 14 in thesis)
 
 ```{r}
-#jpeg("Sole_varPCA.jpg", width = 7, height = 5, units="in", res=1200)
-fviz_pca_var(Pvet.pca, col.var = "contrib", gradient.cols = c("#482677FF", "#20A387FF", "#FDE725FF"), 
+fviz_pca_var(sole.pca, col.var = "contrib", gradient.cols = c("#482677FF", "#20A387FF", "#FDE725FF"), 
              repel = TRUE, legend.title = "Contribution") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(),
         axis.line = element_line(colour = "black")) +
   labs(title = NULL, x = "Principal Component 1 (41.3%)", y = "Principal Component 2 (21.6%)") +
   theme(axis.title=element_text(size=14,face="bold")) 
-#dev.off()
 ```
 
-#color individuals by DO
+#color individuals by DO (Figure 15 in thesis)
 
 ```{r}
 #jpeg("Sole_indPCA.jpg", width = 7, height = 5, units="in", res=1200)
-fviz_pca_ind(Pvet.pca, label="none", habillage=Pvet_na$DO, addEllipses=TRUE, 
+fviz_pca_ind(sole.pca, label="none", habillage=sole_na$DO, addEllipses=TRUE, 
              ellipse.level=0.95, legend.title = "DO (mg/L)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
@@ -80,11 +78,10 @@ fviz_pca_ind(Pvet.pca, label="none", habillage=Pvet_na$DO, addEllipses=TRUE,
 #dev.off() 
 ```
 
-#plot with ellipses & variables arrows
+#plot with ellipses & variables arrows (figure used in defense)
 
 ```{r}
-jpeg("EnglishSole_PCA_Biplot.jpg", width = 7, height = 5, units="in", res=1200)
-fviz_pca_biplot(Pvet.pca, label="var", repel = TRUE, alpha.ind=0, mean.point=FALSE, col.var = "black", habillage=Pvet_na$DO,
+fviz_pca_biplot(sole.pca, label="var", repel = TRUE, alpha.ind=0, mean.point=FALSE, col.var = "black", habillage=sole_na$DO,
                addEllipses=TRUE, ellipse.level=0.95, legend.title = "DO (mg/L)") + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), 
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
@@ -92,20 +89,18 @@ fviz_pca_biplot(Pvet.pca, label="var", repel = TRUE, alpha.ind=0, mean.point=FAL
   theme(axis.title=element_text(size=14,face="bold")) +
   scale_colour_viridis_d(option = "viridis") +
   scale_fill_viridis_d(option = "viridis")
-dev.off()
 ```
-
 
 #PCA with scores
 
 ```{r}
-princomp(Pvet_na[,c(7:11)], cor = FALSE, scores = TRUE)
+princomp(sole_na[,c(7:11)], cor = FALSE, scores = TRUE)
 ```
 
 #add DO as supplementary qualitative variable ("quali.sup") - DO is column 3
 
 ```{r}
-res.pca <- PCA(Pvet_na[,c(7:11)], quali.sup = 3, graph = FALSE)
+res.pca <- PCA(sole_na[,c(7:11)], quali.sup = 3, graph = FALSE)
 ```
 
 ```{r}
@@ -123,7 +118,7 @@ ind$coord[,1]
 #create new dataframe of individual PC scores with DO levels and coordinates for PC1 and PC2
 
 ```{r}
-ind_PC <- select(Pvet_na, c("DO"))
+ind_PC <- select(sole_na, c("DO"))
 ind_PC$coordPC1 <- ind$coord[,1]
 ind_PC$coordPC2 <- ind$coord[,2]
 ind_PC
@@ -180,8 +175,6 @@ print(summary(sole_vPC2_lm))
 #combine plots with patchwork
 
 ```{r}
-jpeg("EnglishSole_PC1_2.jpg", width = 14, height = 10, units="in", res=1200)
-
 #Regression of PC scores on PC1 vs DO
 
 sole_pc1_p1 <- ggplot(ind_PC, aes(DO, coordPC1)) +
@@ -228,7 +221,5 @@ sole_pc2_p4 <- ggplot(sole_vPC2, aes(DO, varPC2)) +
 
 (sole_pc1_p1 | sole_pc1_p2)/
   (sole_pc2_p3 | sole_pc2_p4)
-
-dev.off()
 ```
 
