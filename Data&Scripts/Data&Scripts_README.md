@@ -93,5 +93,10 @@ This analysis includes data from multiple physiological response measurements.
 
 _csv files for both species with fish ID, Species, DO (mg/L), weight (g), total length (cm), pre- and post-exposure ventilation rate (breaths/min), hematocrit (%), L-Lactate in muscle tissue (uM), superoxide dismutase (SOD) in gill tissue (U/mL), and hypoxia-inducibel factor-1a (HIF) in brain tissue (pg/mL)._
 
+* [**"Englishsole_PCA.Rmd"**](PCA/Englishsole_PCA.Rmd) (Figures 14, 15, 16, & 17 in thesis)
 
+_R script for running principal component analysis (PCA) on English sole dataset._
 
+* [**"Speckledsanddab_PCA.Rmd"**](PCA/Speckledsanddab_PCA.Rmd) (Figures 14, 15, 16, & 17 in thesis)
+
+_R script for running principal component analysis (PCA) on speckled sanddab dataset._
