@@ -172,7 +172,7 @@ sole_vPC2_lm <- lm(sole_vPC2$varPC2 ~ sole_vPC2$DO)
 print(summary(sole_vPC2_lm))
 ```
 
-#combine plots with patchwork
+#combine plots with patchwork (Figure 16 in thesis)
 
 ```{r}
 #Regression of PC scores on PC1 vs DO
