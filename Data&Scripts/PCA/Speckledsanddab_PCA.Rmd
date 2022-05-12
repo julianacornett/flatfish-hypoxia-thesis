@@ -241,7 +241,7 @@ dab_pc1_p1 <- ggplot(ind_PC, aes(DO, coordPC1)) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Individual PC Score (PC1)") + 
-  geom_text(aes(x=6.5, y=2.5, label= "R^2 < 0.001~~~p == 0.98"), size=5, parse = TRUE)
+  geom_text(aes(x=7, y=2.75, label= "R^2 < 0.001~~~p == 0.98"), size=5, parse = TRUE)
 
 #Regression in PC1 PC Score Variance vs DO
 
@@ -249,10 +249,10 @@ dab_pc1_p2 <- ggplot(dab_vPC1, aes(DO, varPC1)) +
   geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
-  ylab("Variance in Individual PC Score (PC1)")
+  ylab("Variance in Individual PC Score (PC1)") +
+  geom_text(aes(x=7, y=2.5, label= "R^2 == 0.25~~~p == 0.31"), size=5, parse = TRUE)
 
 #Nonlinear Regression of Individual PC scores on PC2 vs DO
 
@@ -263,7 +263,7 @@ dab_pc2_p3 <- ggplot(indPC2_noOutlier, aes(DO, coordPC2) ) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Individual PC Score (PC2)") +
-  geom_text(aes(x=6.5, y=2, label= "R^2 == 0.32~~~p < 0.001 "), size=5, parse = TRUE)
+  geom_text(aes(x=7, y=2, label= "R^2 == 0.32~~~p < 0.001 "), size=5, parse = TRUE)
 
 #Regression in PC2 PC Score Variance vs DO
 
@@ -274,7 +274,7 @@ dab_pc2_p4 <- ggplot(dab_vPC2, aes(DO, varPC2) ) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Variance in Individual PC Score (PC2)") +
-  geom_text(aes(x=7, y=0.55, label = "R^2 == 0.54~~~p == 0.31"), size = 5, parse = TRUE)
+  geom_text(aes(x=7, y=0.575, label = "R^2 == 0.54~~~p == 0.31"), size = 5, parse = TRUE)
 
 (dab_pc1_p1 | dab_pc1_p2)/
   (dab_pc2_p3 | dab_pc2_p4)
