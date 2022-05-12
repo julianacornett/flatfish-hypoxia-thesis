@@ -181,10 +181,10 @@ sole_pc1_p1 <- ggplot(ind_PC, aes(DO, coordPC1)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
-  ylab("Individual PC Score (PC1)")
+  ylab("Individual PC Score (PC1)") + 
+  geom_text(aes(x=7, y=3, label= "R^2 == 0.17~~~p == 0.01"), size=5, parse = TRUE)
 
 #Regression in PC1 PC Score Variance vs DO
 
@@ -192,10 +192,10 @@ sole_pc1_p2 <- ggplot(sole_vPC1, aes(DO, varPC1)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
-  ylab("Variance in Individual PC Score (PC1)")
+  ylab("Variance in Individual PC Score (PC1)") + 
+  geom_text(aes(x=7, y=2.5, label= "R^2 == 0.92~~~p == 0.002"), size=5, parse = TRUE)
 
 #Regression of Individual PC scores on PC2 vs DO
 
@@ -206,7 +206,7 @@ sole_pc2_p3 <- ggplot(ind_PC, aes(DO, coordPC2)) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Individual PC Score (PC2)") + 
-  geom_text(aes(x=6.5, y=2.5, label= "R^2 < 0.001~~~p == 0.86"), size=5, parse = TRUE)
+  geom_text(aes(x=7, y=3, label= "R^2 < 0.001~~~p == 0.86"), size=5, parse = TRUE)
 
 #Regression in PC2 PC Score Variance vs DO
 
@@ -214,10 +214,10 @@ sole_pc2_p4 <- ggplot(sole_vPC2, aes(DO, varPC2)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6, label.x = 5) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
-  ylab("Variance in Individual PC Score (PC2)")
+  ylab("Variance in Individual PC Score (PC2)") + 
+  geom_text(aes(x=7, y=2.75, label= "R^2 == 0.15~~~p == 0.45"), size=5, parse = TRUE)
 
 (sole_pc1_p1 | sole_pc1_p2)/
   (sole_pc2_p3 | sole_pc2_p4)
