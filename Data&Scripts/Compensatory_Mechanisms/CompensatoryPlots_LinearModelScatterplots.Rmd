@@ -77,21 +77,21 @@ print(summary(soleHct_lm))
 #scatterplots combined with patchwork (Figure 6 in thesis)
 
 ```{r}
-sole_comp_scatter_p1 <- ggplot(soleComp, aes(x = DO, y = Hct)) +
+sole_comp_scatter_p1 <- ggplot(PvetComp, aes(x = DO, y = Hct)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), size = 6) +
+  geom_text(aes(x=7, y=40, label= "R^2 == 0.056~~~p == 0.12"), parse=TRUE, size=6) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Hematocrit (%)") +
   ylim(15,40)
 
-sole_comp_scatter_p2 <- ggplot(soleComp, aes(x = DO, y = VentChange)) +
+sole_comp_scatter_p2 <- ggplot(PvetComp, aes(x = DO, y = VentChange)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  geom_text(aes(x=2, y=30, label= "R^2 == 0.23~~~p < 0.001"), parse=TRUE, size=6) +
+  geom_text(aes(x=7, y=30, label= "R^2 == 0.23~~~p < 0.001"), parse=TRUE, size=6) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Change in Ventilation (breaths/min)")
@@ -120,24 +120,24 @@ print(summary(dabHct_lm))
 #scatterplots combined with patchwork (Figure 7 in thesis)
 
 ```{r}
-dab_comp_scatter_p1 <- ggplot(dabComp, aes(x = DO, y = Hct)) +
+dab_comp_scatter_p1 <- ggplot(CstigComp, aes(x = DO, y = Hct)) +
   geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x = 1.75, size = 6) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Hematocrit (%)") +
-  ylim(20,50)
+  ylim(20,50) +
+  geom_text(aes(x=7, y=47, label= "R^2 == 0.061~~~p == 0.09"), parse=TRUE, size=6)
 
-dab_comp_scatter_p2 <- ggplot(dabComp, aes(DO, VentChange) ) +
+dab_comp_scatter_p2 <- ggplot(CstigComp, aes(DO, VentChange) ) +
   geom_point(fill = "lightgoldenrod2", shape = 21, size = 5) +
   theme_pubr() +
   stat_smooth(method='lm', color="black", se = FALSE, formula = y ~ poly(x, 2)) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   xlab("DO (mg/L)") +
   ylab("Change in Ventilation Rate (breaths/min)") +
-  geom_text(aes(x=2.5, y=42, label= "R^2 == 0.7101~~~p < 0.001"), parse=TRUE, size=6)
+  geom_text(aes(x=7, y=42, label= "R^2 == 0.7101~~~p < 0.001"), parse=TRUE, size=6)
 
 dab_comp_scatter_p1 / dab_comp_scatter_p2
 ```
