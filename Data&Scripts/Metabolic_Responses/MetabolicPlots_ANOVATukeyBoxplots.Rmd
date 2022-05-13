@@ -90,7 +90,7 @@ postSMR_box <- ggplot(PostSMR, aes(DO_mgL, HypSMR)) +
   geom_point(shape=1) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
-  geom_text(x=1.5, y=600, label="ANOVA, p = 0.893", size=5) +
+  geom_text(x=5.5, y=635, label="ANOVA, p = 0.893", size=5) +
   ylab("Post-exposure SMR (mgO2/kg/hr)") + 
   xlab("DO (mg/L)")
 ```
@@ -130,7 +130,7 @@ postMMR_box <- ggplot(PostMMR, aes(DO_mgL, HypMMR)) +
   geom_point(shape=1) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
-  geom_text(x=1.5, y=600, label="ANOVA, p = 0.588", size=5) +
+  geom_text(x=5.5, y=635, label="ANOVA, p = 0.588", size=5) +
   ylab("Post-exposure MMR (mgO2/kg/hr)") + 
   xlab("DO (mg/L)")
 ```
@@ -170,7 +170,7 @@ postScope_box <- ggplot(PostScope, aes(DO_mgL, HypScope)) +
   geom_point(shape=1) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
-  geom_text(x=1.5, y=-50, label="ANOVA, p = 0.0688", size=5) +
+  geom_text(x=5.5, y=340, label="ANOVA, p = 0.0688", size=5) +
   ylab("Post-exposure Aerobic Scope (mgO2/kg/hr)") + 
   xlab("DO (mg/L)")
 ```
@@ -242,7 +242,7 @@ changeSMR_box <- ggplot(changeSMR, aes(DO_mgL, SMRChange)) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   geom_text(data = changeSMR_table, aes(x = DO_mgL, y = quant, label = changeSMR_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=1.5, y=-300, label="ANOVA, p = 0.0366", size=5) +
+  geom_text(x=5.5, y=50, label="ANOVA, p = 0.0366", size=5) +
   ylab("Change in SMR (mgO2/kg/hr)") + 
   xlab("DO (mg/L)")
 ```
@@ -312,7 +312,7 @@ changeMMR_box <- ggplot(changeMMR, aes(DO_mgL, MMRChange)) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   geom_text(data = changeMMR_table, aes(x = DO_mgL, y = quant, label = changeMMR_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=2.25, y=-700, label="ANOVA, p < 0.001", size=5) +
+  geom_text(x=5.5, y=225, label="ANOVA, p < 0.001", size=5) +
   ylab("Change in MMR (mgO2/kg/hr)") + 
   xlab("DO (mg/L)")
 ```
@@ -382,7 +382,7 @@ changeScope_box <- ggplot(changeScope, aes(DO_mgL, ScopeChange)) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   geom_text(data = changeScope_table, aes(x = DO_mgL, y = quant, label = changeScope_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=2.25, y=-575, label="ANOVA, p = 0.0539", size=5) +
+  geom_text(x=5.5, y=350, label="ANOVA, p = 0.0539", size=5) +
   ylab("Change in Aerobic Scope (mgO2/kg/hr)") + 
   xlab("DO (mg/L)")
 ```
