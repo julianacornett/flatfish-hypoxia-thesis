@@ -118,13 +118,13 @@ print(sole_vent_table)
 #boxplot
 
 ```{r}
-sole_vent_box <- ggplot(soleVent, aes(DO, VentChange)) + 
+sole_vent_box <- ggplot(PvetVent, aes(DO, VentChange)) + 
   geom_boxplot(fill = "lightskyblue1") +
   geom_point(shape=1) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   geom_text(data = sole_vent_table, aes(x = DO, y = quant, label = sole_vent_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=1.5, y=0, label="ANOVA, p = 0.00507", size=5) +
+  geom_text(x=5.5, y=30, label="ANOVA, p = 0.00507", size=5) +
   ylab("Change in Ventilation Rate (breaths/min)") + 
   xlab("DO (mg/L)")
 ```
@@ -188,13 +188,13 @@ print(dab_vent_table)
 #boxplot
 
 ```{r}
-dab_vent_box <- ggplot(dabVent, aes(DO, VentChange)) + 
+dab_vent_box <- ggplot(CstigVent, aes(DO, VentChange)) + 
   geom_boxplot(fill = "lightgoldenrod2") +
   geom_point(shape=1) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   geom_text(data = dab_vent_table, aes(x = DO, y = quant, label = dab_vent_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=1.5, y=0, label="ANOVA, p < 0.001", size=5) +
+  geom_text(x=5.5, y=40, label="ANOVA, p < 0.001", size=5) +
   ylab("Change in Ventilation Rate (breaths/min)") + 
   xlab("DO (mg/L)")
 ```
@@ -260,13 +260,13 @@ print(sole_hct_table)
 #boxplot
 
 ```{r}
-sole_hct_box <- ggplot(soleHct, aes(DO, Hct)) + 
+sole_hct_box <- ggplot(PvetHct, aes(DO, Hct)) + 
   geom_boxplot(fill = "lightskyblue1") +
   geom_point(shape=1) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   geom_text(data = sole_hct_table, aes(x = DO, y = quant, label = sole_hct_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=1.5, y=20, label="ANOVA, p = 0.0502", size=5) +
+  geom_text(x=5.5, y=37.5, label="ANOVA, p = 0.0502", size=5) +
   ylab("Hematocrit (%)") + 
   xlab("DO (mg/L)")
 ```
@@ -331,13 +331,13 @@ print(dab_hct_table)
 #boxplot
 
 ```{r}
-dab_hct_box <- ggplot(dabHct, aes(DO, Hct)) + 
+dab_hct_box <- ggplot(CstigHct, aes(DO, Hct)) + 
   geom_boxplot(fill = "lightgoldenrod2") +
   geom_point(shape=1) +
   theme_pubr() +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=18, face="bold")) +
   geom_text(data = dab_hct_table, aes(x = DO, y = quant, label = dab_hct_cld, vjust=-1, hjust =-1)) +
-  geom_text(x=1.5, y=27, label="ANOVA, p = 0.0231", size=5) +
+  geom_text(x=5.5, y=47.5, label="ANOVA, p = 0.0231", size=5) +
   ylab("Hematocrit (%)") + 
   xlab("DO (mg/L)")
 ```
