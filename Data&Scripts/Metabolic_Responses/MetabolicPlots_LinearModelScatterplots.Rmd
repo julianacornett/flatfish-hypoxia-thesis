@@ -102,7 +102,7 @@ SMR_Post_p1 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypSMR)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x.npc = "left", label.y.npc = "top", size=6, face="bold") +
+  geom_text(aes(x=6.85, y=675, label= "R^2 == 0.0054~~~p == 0.64"), size=6, parse = TRUE) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) + 
   xlab(NULL) +
   ylab("Post-exposure SMR (mgO2/kg/hr)")
@@ -111,7 +111,7 @@ SMR_Change_p2 <- ggplot(sole_scope, aes(x = DO_mgL, y = SMRChange)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x = 5.5, label.y.npc = "bottom", size=6, face="bold") +
+  geom_text(aes(x=6.85, y=75, label= "R^2 == 0.19~~~p == 0.0032"), size=6, parse = TRUE) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) +
   geom_hline(yintercept=0, linetype='dotted') + 
   xlab(NULL) +
@@ -121,7 +121,7 @@ MMR_Post_p3 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypMMR)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x.npc = "left", label.y.npc = "top", size=6, face="bold") +
+  geom_text(aes(x=6.85, y=675, label= "R^2 == 0.07~~~p == 0.083"), size=6, parse = TRUE) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) + 
   xlab(NULL) +
   ylab("Post-exposure MMR (mgO2/kg/hr)")
@@ -130,7 +130,7 @@ MMR_Change_p4 <- ggplot(sole_scope, aes(x = DO_mgL, y = MMRChange)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  geom_text(aes(x=6.85, y=-600, label= "R^2 == 0.33~~~p < 0.001"), size=6, parse = TRUE) +
+  geom_text(aes(x=6.85, y=250, label= "R^2 == 0.33~~~p < 0.001"), size=6, parse = TRUE) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) +
   geom_hline(yintercept=0, linetype='dotted') + 
   xlab(NULL) +
@@ -140,7 +140,7 @@ Scope_Post_p5 <- ggplot(sole_scope, aes(x = DO_mgL, y = HypScope)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x.npc = "left", label.y.npc = "top", size=6, face="bold") +
+  geom_text(aes(x=6.85, y=400, label= "R^2 == 0.23~~~p == 0.0012"), size=6, parse = TRUE) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) + 
   xlab("DO (mg/L)") +
   ylab("Post-exposure Aerobic Scope (mgO2/kg/hr)")
@@ -149,7 +149,7 @@ Scope_Change_p6 <- ggplot(sole_scope, aes(x = DO_mgL, y = ScopeChange)) +
   geom_point(fill = "lightskyblue1", shape = 21, size = 5) +
   theme_pubr() +
   geom_smooth(method = "lm", color ="black", se = FALSE) +
-  stat_cor(aes(label = paste(..rr.label.., ..p.label.., sep = "*`,`~")), label.x = 5.5, label.y.npc = "bottom", size=6, face="bold") +
+  geom_text(aes(x=6.85, y=400, label= "R^2 == 0.15~~~p == 0.014"), size=6, parse = TRUE) +
   theme(axis.text = element_text(size=14), axis.title = element_text(size=16, face="bold")) +
   geom_hline(yintercept=0, linetype='dotted') + 
   xlab("DO (mg/L)") +
